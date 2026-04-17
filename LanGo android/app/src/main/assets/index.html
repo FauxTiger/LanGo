@@ -1,18 +1,17 @@
 <!-- Copyright (c) 2026 FauxTiger -->
-<!-- Ce logiciel est distribué sous la licence GNU GPLv3. -->
-<!-- Le code est fourni "TEL QUEL", sans aucune garantie. -->
-<!-- Voir le fichier LICENSE à la racine pour plus de détails. -->
+<!-- This software is distributed under the GNU GPLv3 license. -->
+<!-- The code is provided "AS IS", without any warranty. -->
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="/logo.png">
-    <title>LanGo: Apprentissage</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <title>LanGo: Language Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- AJOUT: Polices pour le Japonais (Noto Sans JP) et l'Arabe (Noto Naskh Arabic) -->
+    <!-- Fonts for Japanese (Noto Sans JP) and Arabic (Noto Naskh Arabic) -->
     <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap"
             rel="stylesheet">
@@ -25,15 +24,15 @@
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
             --accent: #8b5cf6;
-            /* Violet */
+            /* Purple */
             --accent-hover: #7c3aed;
             --highlight: #f472b6;
-            /* Rose */
+            /* Pink */
             --font-main: 'Poppins', sans-serif;
             --font-book: 'Lora', serif;
         }
 
-        /* AJOUT: Support RTL (Arabe) */
+        /* RTL Support (Arabic) */
         html[dir="rtl"] {
             text-align: right;
         }
@@ -54,8 +53,8 @@
             }
         }
 
-        /* Ajustement des polices selon la langue */
-        body.lang-ja {
+        /* Font adjustment based on language */
+        body.lang-ja, body.lang-jp {
             font-family: 'Noto Sans JP', sans-serif;
         }
 
@@ -72,7 +71,7 @@
             overscroll-behavior-y: none;
         }
 
-        /* --- ANIMATIONS GÉNÉRALES --- */
+        /* --- GENERAL ANIMATIONS --- */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -123,7 +122,6 @@
             }
         }
 
-        /* Animation de secousse pour l'erreur */
         @keyframes shake {
 
             0%,
@@ -169,7 +167,7 @@
             border-color: #ef4444 !important;
         }
 
-        /* --- ANIMATIONS ONBOARDING --- */
+        /* --- ONBOARDING ANIMATIONS --- */
         @keyframes slideUpFade {
             from {
                 opacity: 0;
@@ -265,7 +263,6 @@
             box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
         }
 
-        /* Style spécial pour multi-sélection */
         .qcm-option.multi-selected::after {
             content: '✓';
             position: absolute;
@@ -378,7 +375,6 @@
             align-self: flex-start;
             border-bottom-left-radius: 4px;
             font-family: var(--font-book);
-            /* Use reader font for AI replies in chat for consistency */
         }
 
         .typing-indicator span {
@@ -421,10 +417,8 @@
             bottom: 0;
             z-index: 100;
             pointer-events: none;
-            /* Le conteneur ne bloque pas, les enfants oui */
             opacity: 0;
             visibility: hidden;
-            /* Important pour ne pas bloquer quand inactif */
             transition: opacity 0.3s ease, visibility 0s 0.3s;
         }
 
@@ -434,28 +428,22 @@
             transition: opacity 0.3s ease, visibility 0s;
         }
 
-        /* Les Blockers : Zones noires qui bloquent les clics */
         .tour-blocker {
             position: absolute;
             background: rgba(0, 0, 0, 0.85);
-            /* Fond sombre */
             pointer-events: auto;
-            /* CRUCIAL : Bloque les clics */
             z-index: 101;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .tour-spotlight {
             position: absolute;
-            /* Plus de box-shadow hack, les blockers font le travail */
             border: 2px solid var(--accent);
             border-radius: 12px;
             pointer-events: none;
-            /* Le spotlight laisse passer le clic vers l'élément cible */
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             animation: pulse-border 2s infinite;
             z-index: 102;
-            /* Au dessus des blockers pour la bordure */
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.1);
         }
 
@@ -470,7 +458,6 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             transition: top 0.3s ease, left 0.3s ease;
             z-index: 105;
-            /* Au dessus de tout */
             pointer-events: auto;
         }
 
@@ -549,10 +536,9 @@
     </div>
 
     <div class="flex items-center gap-2">
-        <!-- BOUTON DONATION -->
         <button onclick="changeView('view-donate')"
                 class="p-2 rounded-full hover:bg-pink-500/10 text-pink-400 hover:text-pink-300 transition-colors"
-                title="Soutenir">
+                title="Support">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path
                         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
@@ -576,12 +562,12 @@
 <div id="view-onboarding" class="view-section items-center justify-center p-4">
     <div class="max-w-md w-full relative">
         <div class="flex justify-between text-xs text-slate-400 mb-2 font-medium">
-            <span data-i18n="profile">Profil</span>
-            <span id="onboarding-step-count">1/5</span>
+            <span data-i18n="profile">Profile</span>
+            <span id="onboarding-step-count">1/6</span>
         </div>
         <div class="w-full bg-slate-800 h-2 rounded-full mb-8 overflow-hidden">
             <div id="onboarding-progress" class="bg-violet-500 h-full transition-all duration-300"
-                 style="width: 20%"></div>
+                 style="width: 16%"></div>
         </div>
 
         <div id="onboarding-container" class="min-h-[350px] flex flex-col justify-center">
@@ -596,7 +582,7 @@
             <button id="onboarding-next-btn"
                     class="flex-grow btn-primary py-4 rounded-xl font-bold text-white shadow-lg disabled:opacity-50 transition-all"
                     onclick="nextOnboardingStep()" disabled data-i18n="next">
-                Suivant
+                Next
             </button>
         </div>
     </div>
@@ -607,18 +593,16 @@
     <div class="w-full max-w-2xl animate-fade-in">
 
         <div id="creation-container" class="glass-panel p-4 rounded-2xl mb-8 relative z-10 border border-white/5">
-
-            <!-- NEW: Mode Switcher -->
             <div class="mode-switch">
                 <div class="mode-option active" id="mode-story" onclick="setCreationMode('story')"
-                     data-i18n="story_mode">Histoires</div>
+                     data-i18n="story_mode">Stories</div>
                 <div class="mode-option" id="mode-chat" onclick="setCreationMode('chat')" data-i18n="chat_mode">
-                    Discussion</div>
+                    Chat</div>
             </div>
 
             <div class="flex justify-between items-center mb-4 px-1">
                     <span id="tour-welcome-target" class="text-xs font-bold text-violet-400 uppercase"
-                          data-i18n="new_content">Nouveau Contenu</span>
+                          data-i18n="new_content">New Content</span>
 
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" id="random-toggle" class="sr-only peer"
@@ -626,25 +610,24 @@
                     <div
                             class="w-9 h-5 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-violet-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-violet-500">
                     </div>
-                    <span class="ml-2 text-xs font-medium text-slate-300" data-i18n="random_mode">Mode
-                            Aléatoire</span>
+                    <span class="ml-2 text-xs font-medium text-slate-300" data-i18n="random_mode">Random Mode</span>
                 </label>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2">
                 <input type="text" id="creation-input"
                        class="flex-grow bg-slate-800/80 rounded-xl border border-white/10 p-3 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
-                       data-i18n-placeholder="input_placeholder" placeholder="Ex: Un détective à Paris...">
+                       data-i18n-placeholder="input_placeholder" placeholder="Ex: A detective in Paris...">
 
                 <div id="random-placeholder"
                      class="hidden flex-grow bg-slate-800/80 rounded-xl border border-dashed border-violet-500/30 p-3 text-violet-300 italic text-center text-sm flex items-center justify-center animate-pulse"
                      data-i18n="surprise_subject">
-                    🎲 Sujet Surprise activé
+                    🎲 Surprise Subject Activated
                 </div>
 
                 <button id="generate-btn" onclick="handleGenerate()"
                         class="btn-primary px-6 py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2">
-                    <span id="gen-btn-text" data-i18n="create">Créer</span>
+                    <span id="gen-btn-text" data-i18n="create">Create</span>
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -653,15 +636,14 @@
             </div>
         </div>
 
-        <!-- Resume Chat Button (Visible if active chat exists) -->
         <div id="resume-chat-container" class="hidden mb-6">
             <button onclick="changeView('view-chat')"
                     class="w-full p-4 rounded-2xl bg-slate-800/50 border border-violet-500/20 flex items-center justify-between hover:bg-slate-800 transition-colors">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl"><img src="report.png" alt="chat" width="42" height="42"></span>
+                    <span class="text-2xl"><img src="assets/report.png" alt="chat" width="42" height="42"></span>
                     <div class="text-left">
-                        <div class="font-bold text-white" data-i18n="chat_in_progress">Discussion en cours</div>
-                        <div class="text-xs text-slate-400" data-i18n="click_resume">Cliquez pour reprendre</div>
+                        <div class="font-bold text-white" data-i18n="chat_in_progress">Chat in progress</div>
+                        <div class="text-xs text-slate-400" data-i18n="click_resume">Click to resume</div>
                     </div>
                 </div>
                 <span class="text-violet-400">→</span>
@@ -669,7 +651,7 @@
         </div>
 
         <h2 class="text-xl font-bold text-white mb-4 px-1 flex justify-between items-end">
-            <span data-i18n="my_library">Ma Bibliothèque</span>
+            <span data-i18n="my_library">My Library</span>
             <span id="lang-badge"
                   class="text-xs font-mono bg-violet-500/20 text-violet-300 px-2 py-1 rounded">EN</span>
         </h2>
@@ -681,13 +663,12 @@
             <div
                     class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-violet-500 border-t-transparent mb-3">
             </div>
-            <p id="loader-text" class="text-violet-200 text-sm animate-pulse" data-i18n="loading_text">L'IA écrit et
-                traduit votre histoire...</p>
+            <p id="loader-text" class="text-violet-200 text-sm animate-pulse" data-i18n="loading_text">AI is writing and translating your story...</p>
         </div>
     </div>
 </div>
 
-<!-- NEW: CHAT VIEW -->
+<!-- CHAT VIEW -->
 <div id="view-chat" class="view-section relative bg-slate-900">
     <div
             class="sticky top-16 left-0 right-0 bg-[var(--bg)]/95 backdrop-blur z-30 w-full border-b border-white/5 px-4 py-3 flex justify-between items-center">
@@ -696,15 +677,15 @@
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
-            <span class="text-sm font-medium" data-i18n="back">Retour</span>
+            <span class="text-sm font-medium" data-i18n="back">Back</span>
         </button>
         <div class="text-center">
-            <h1 id="chat-title" class="font-bold text-white text-sm">Discussion</h1>
+            <h1 id="chat-title" class="font-bold text-white text-sm">Chat</h1>
             <span class="text-[10px] text-green-400 flex items-center justify-center gap-1"><span
                     class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Online</span>
         </div>
         <button onclick="resetChat()" class="p-2 text-slate-400 hover:text-red-400 transition-colors"
-                title="Nouvelle discussion">
+                title="New Chat">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -713,15 +694,13 @@
     </div>
 
     <div class="chat-container">
-        <div id="chat-messages" class="chat-messages">
-            <!-- Messages will appear here -->
-        </div>
+        <div id="chat-messages" class="chat-messages"></div>
 
         <div class="p-4 bg-[var(--bg)] border-t border-white/5">
             <form onsubmit="sendChatMessage(event)" class="relative flex gap-2">
                 <input type="text" id="chat-input"
                        class="flex-grow bg-slate-800 rounded-xl border border-white/10 p-3 pl-4 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
-                       data-i18n-placeholder="chat_input_placeholder" placeholder="Écrivez votre message..."
+                       data-i18n-placeholder="chat_input_placeholder" placeholder="Type your message..."
                        autocomplete="off">
                 <button type="submit" id="chat-send-btn"
                         class="p-3 bg-violet-600 rounded-xl text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-violet-500 transition-colors shadow-lg">
@@ -744,7 +723,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
-        <h1 id="reader-title" class="font-bold text-white truncate max-w-[200px] text-center">Titre</h1>
+        <h1 id="reader-title" class="font-bold text-white truncate max-w-[200px] text-center">Title</h1>
 
         <button id="translate-toggle-btn"
                 class="p-2 text-slate-400 hover:text-violet-400 transition-colors rounded-lg bg-slate-800/50 border border-white/10"
@@ -762,7 +741,7 @@
 
         <div id="reader-tips" class="text-center text-[10px] text-slate-500 mb-4 opacity-70"
              data-i18n="reader_tips">
-            Clic Mot = Définition • Clic Espace/Phrase = Traduction complète
+            Click Word = Definition • Click Space/Sentence = Full Translation
         </div>
 
         <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-xl mb-6 relative">
@@ -794,7 +773,7 @@
                 <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                <span data-i18n="continue_reading">Lire la suite</span>
+                <span data-i18n="continue_reading">Continue Reading</span>
             </button>
             <div id="continue-loader" class="hidden mt-4 flex gap-1">
                 <div class="w-2 h-2 bg-violet-400 rounded-full animate-bounce"></div>
@@ -817,15 +796,14 @@
         <div class="glass-panel p-8 rounded-3xl text-center relative z-10 border border-pink-500/20">
             <div
                     class="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-pink-500/20 mb-6 animate-float">
-                <img src="hug.png" alt="hug" width="72" height="72">
+                <img src="assets/hug.png" alt="hug" width="72" height="72">
             </div>
 
-            <h2 class="text-2xl font-bold text-white mb-2" data-i18n="support_title">Soutenir LanGo</h2>
+            <h2 class="text-2xl font-bold text-white mb-2" data-i18n="support_title">Support LanGo</h2>
             <div class="w-16 h-1 bg-pink-500 mx-auto rounded-full mb-6"></div>
 
             <p class="text-slate-300 mb-8 leading-relaxed text-sm" data-i18n="support_text">
-                LanGo est gratuit et développé avec passion. Si vous apprenez de nouvelles langues grâce à nous,
-                votre soutien nous aiderai à créer de nouveaux sites et applications !
+                LanGo is free and developed with passion. If you learn new languages thanks to us, your support helps create new apps!
             </p>
 
             <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"
@@ -837,32 +815,32 @@
                         class="w-full py-4 bg-[#FFC439] hover:bg-[#F4BB29] text-slate-900 font-bold rounded-xl transition-all transform active:scale-95 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#FFC439]/30 group-hover:-translate-y-1">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                         <path
-                                d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 0.867 4.498-1.307 6.235-4.34 8.034-8.769 8.034h-1.28c-.762 0-1.056.666-1.21 1.408l-.99 4.674c-.066.311-.342.913-.69.913z" />
+                                d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 0.867 4.498-1.307 6.235-4.34-8.769 8.034h-1.28c-.762 0-1.056.666-1.21 1.408l-.99 4.674c-.066.311-.342.913-.69.913z" />
                     </svg>
-                    <span data-i18n="donate_button">Faire un don PayPal ou Bancaire</span>
+                    <span data-i18n="donate_button">Donate via PayPal</span>
                 </button>
                 <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
             </form>
 
             <button onclick="changeView('view-home')"
                     class="mt-8 text-slate-500 hover:text-white text-sm transition-colors py-2" data-i18n="no_thanks">
-                Non merci, retourner à l'accueil
+                No thanks, return home
             </button>
         </div>
 
         <p class="text-center text-[10px] text-slate-600 mt-6" data-i18n="secure_msg">
-            Paiement sécurisé géré par PayPal. Aucun don n'est obligatoire.
+            Secure payment via PayPal. No donation required.
         </p>
     </div>
 </div>
 
-<!-- FEEDBACK (NOUVELLE PAGE) -->
+<!-- FEEDBACK -->
 <div id="view-feedback" class="view-section items-center justify-center p-4">
     <div class="w-full max-w-md animate-fade-in">
-        <h2 class="text-2xl font-bold mb-6 text-white text-center" data-i18n="feedback_title">Votre avis compte</h2>
+        <h2 class="text-2xl font-bold mb-6 text-white text-center" data-i18n="feedback_title">Your Feedback</h2>
         <div class="glass-panel p-6 rounded-2xl">
             <p class="text-slate-400 text-sm mb-6 text-center" data-i18n="feedback_desc">
-                Une suggestion ? Un bug à signaler ? Dites-nous tout pour améliorer LanGo !
+                Suggestion? Bug? Tell us everything!
             </p>
 
             <div id="feedback-status" class="hidden text-sm text-center p-3 rounded-lg"></div>
@@ -871,18 +849,17 @@
                 <button type="button" onclick="changeView('view-settings')"
                         class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition"
                         data-i18n="cancel">
-                    Annuler
+                    Cancel
                 </button>
                 <button type="submit" id="feedback-submit-btn"
                         class="flex-grow btn-primary py-3 rounded-xl font-bold text-white shadow-lg flex justify-center items-center gap-2">
-                    <span data-i18n="send">Envoyer</span>
+                    <span data-i18n="send">Send</span>
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
                 </button>
             </div>
-            </form> -->
         </div>
     </div>
 </div>
@@ -890,72 +867,66 @@
 <!-- SETTINGS -->
 <div id="view-settings" class="view-section items-center p-4">
     <div class="w-full max-w-md mt-10 animate-fade-in">
-        <h2 class="text-2xl font-bold mb-6 text-white text-center" data-i18n="settings">Paramètres</h2>
+        <h2 class="text-2xl font-bold mb-6 text-white text-center" data-i18n="settings">Settings</h2>
         <div class="glass-panel p-6 rounded-2xl space-y-6">
 
-            <!-- AJOUT: SÉLECTEUR LANGUE INTERFACE -->
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase mb-2"
-                       data-i18n="interface_lang">Langue de l'interface</label>
+                       data-i18n="interface_lang">Interface Language</label>
                 <select id="setting-interface-lang"
                         class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white"
                         onchange="updateInterfaceLanguage(this.value)"></select>
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-violet-400 uppercase mb-2" data-i18n="target_lang">Langue
-                    cible</label>
+                <label class="block text-xs font-bold text-violet-400 uppercase mb-2" data-i18n="target_lang">Target Language</label>
                 <select id="setting-lang"
                         class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white"
                         onchange="updateSetting('targetLang', this.value)"></select>
             </div>
             <div>
-                <label class="block text-xs font-bold text-pink-400 uppercase mb-2" data-i18n="level">Niveau</label>
+                <label class="block text-xs font-bold text-pink-400 uppercase mb-2" data-i18n="level">Level</label>
                 <select id="setting-level"
                         class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white"
                         onchange="updateSetting('level', this.value)">
-                    <option value="beginner" data-i18n="lvl_beginner">Débutant (A1-A2)</option>
-                    <option value="intermediate" data-i18n="lvl_intermediate">Intermédiaire (B1-B2)</option>
-                    <option value="advanced" data-i18n="lvl_advanced">Avancé (C1-C2)</option>
+                    <option value="beginner" data-i18n="lvl_beginner">Beginner (A1-A2)</option>
+                    <option value="intermediate" data-i18n="lvl_intermediate">Intermediate (B1-B2)</option>
+                    <option value="advanced" data-i18n="lvl_advanced">Advanced (C1-C2)</option>
                 </select>
             </div>
 
             <div class="pt-4 border-t border-white/5 space-y-3">
                 <button onclick="changeView('view-donate')"
                         class="w-full py-3 bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/30 rounded-xl font-medium transition flex items-center justify-center gap-2">
-                    <span data-i18n="support_project">💖 Soutenir le projet</span>
+                    <span data-i18n="support_project">💖 Support the project</span>
                 </button>
 
                 <button onclick="restartTutorial()"
                         class="w-full py-3 bg-slate-700 hover:bg-violet-600 text-white rounded-xl font-medium transition flex items-center justify-center gap-2">
-                    <span data-i18n="restart_tutorial">🎓 Relancer le Tutoriel</span>
+                    <span data-i18n="restart_tutorial">🎓 Restart Tutorial</span>
                 </button>
                 <button id="settings-back-btn" onclick="changeView('view-home')"
                         class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition"
-                        data-i18n="back">Retour</button>
+                        data-i18n="back">Back</button>
             </div>
-            <div class="text-center text-[10px] text-slate-600">LanGo v3.9 • Offline Ready</div>
+            <div class="text-center text-[10px] text-slate-600">LanGo v4.0 • English First</div>
         </div>
     </div>
 </div>
 
-<!-- TUTORIAL LAYER (BLOCKING) -->
+<!-- TUTORIAL LAYER -->
 <div id="guided-tour-layer">
-    <!-- 4 Blockers qui entourent l'élément cible pour empêcher les clics ailleurs -->
     <div id="tour-blocker-top" class="tour-blocker"></div>
     <div id="tour-blocker-bottom" class="tour-blocker"></div>
     <div id="tour-blocker-left" class="tour-blocker"></div>
     <div id="tour-blocker-right" class="tour-blocker"></div>
-
-    <!-- Spotlight : Juste la bordure et l'animation (pointer-events: none) -->
     <div id="tour-spotlight" class="tour-spotlight"></div>
 
     <div id="tour-tooltip" class="tour-tooltip">
         <div class="flex justify-between items-start mb-2">
-            <span class="text-2xl"><img src="happy.png" alt="happy" width="40" height="40"></span>
-            <!-- AJOUT ID ICI POUR LE CIBLAGE -->
+            <span class="text-2xl"><img src="assets/happy.png" alt="happy" width="40" height="40"></span>
             <button id="tour-skip-btn" onclick="tour.stop()"
-                    class="text-xs text-slate-400 underline hover:text-white" data-i18n="skip">Passer</button>
+                    class="text-xs text-slate-400 underline hover:text-white" data-i18n="skip">Skip</button>
         </div>
         <p id="tour-text" class="text-sm leading-relaxed mb-4 font-medium text-slate-200"></p>
         <div class="flex justify-between items-center">
@@ -967,7 +938,7 @@
     </div>
 </div>
 
-<!-- MOVED: POPOVER (WAS IN READER) -->
+<!-- POPOVER -->
 <div id="popover"
      class="fixed z-50 bg-slate-800 border border-violet-500/50 text-white p-4 rounded-xl shadow-2xl hidden w-full text-center transition-opacity duration-200 opacity-0 pointer-events-none"
      style="max-width: calc(100vw - 20px); width: max-content;">
@@ -979,54 +950,12 @@
 
 <script>
     // --- CONSTANTS & CONFIG ---
-    // Au lieu de : const apiKey = "sk-..."
     const apiKey = (typeof AndroidBridge !== 'undefined')
         ? AndroidBridge.getSecretKey()
-        : "[GCP_API_KEY]";
-
+        : "";
 
     // --- TRANSLATIONS DICTIONARY ---
     const UI_TEXTS = {
-        fr: {
-            app_title: "LanGo", profile: "Profil", next: "Suivant",
-            new_story: "Nouvelle Histoire", new_content: "Nouveau Contenu",
-            story_mode: "Histoires", chat_mode: "Discussion", chat_in_progress: "Discussion en cours", click_resume: "Cliquez pour reprendre",
-            random_mode: "Mode Aléatoire", input_placeholder: "Ex: Un détective à Paris...",
-            chat_input_placeholder: "Écrivez votre message...", chat_intro_placeholder: "Ex: Au restaurant, Faire les courses...",
-            surprise_subject: "🎲 Sujet Surprise activé", create: "Créer", start_chat: "Discuter",
-            my_library: "Ma Bibliothèque", loading_text: "L'IA écrit et traduit votre histoire...",
-            reader_tips: "Clic Mot = Définition • Clic Espace/Phrase = Traduction complète",
-            continue_reading: "Lire la suite", support_title: "Soutenir LanGo",
-            support_text: "LanGo est gratuit et développé avec passion. Si vous apprenez de nouvelles langues grâce à nous, votre soutien nous aiderait à créer de nouveaux sites et applications !",
-            donate_button: "Faire un don PayPal ou Bancaire", no_thanks: "Non merci, retourner à l'accueil", secure_msg: "Paiement sécurisé géré par PayPal. Aucun don n'est obligatoire.",
-            feedback_title: "Votre avis compte", feedback_desc: "Une suggestion ? Un bug à signaler ? Dites-nous tout pour améliorer LanGo !",
-            your_email: "Votre Email (Optionnel)", your_message: "Votre Message", message_placeholder: "J'aimerais voir plus d'histoires sur...",
-            cancel: "Annuler", send: "Envoyer", settings: "Paramètres", interface_lang: "Langue de l'interface", target_lang: "Langue cible",
-            level: "Niveau", lvl_beginner: "Débutant (A1-A2)", lvl_intermediate: "Intermédiaire (B1-B2)", lvl_advanced: "Avancé (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Soutenir le projet", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Donner son avis", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Relancer le Tutoriel",
-            back: "Retour", skip: "Passer",
-
-            // Tour Texts
-            tour_welcome: "Bienvenue ! Créez une histoire personnalisée ou activez le switch aléatoire.",
-            tour_settings_btn: "Changez votre langue cible ou niveau ici.",
-            tour_select_lang: "Sélectionnez une langue, puis cliquez sur OK.",
-            tour_settings_back: "Super ! Maintenant, cliquez sur Retour pour revenir à l'accueil.",
-            tour_create: "Pour créer une histoire, écrivez un sujet ici OU activez le mode aléatoire.",
-            tour_click_create: "Parfait ! Cliquez sur Créer pour lancer l'IA.",
-            tour_ready: "C'est prêt ! Voici votre histoire.",
-            tour_word: "Touchez un mot pour voir sa traduction instantanée.",
-            tour_para: "Faites un appui long pour traduire la phrase entière.",
-            tour_toggle: "Basculez ici pour afficher/masquer la traduction complète.",
-
-            // Onboarding
-            ob_lang: "Je veux apprendre...", ob_age: "Ma tranche d'âge", ob_level: "Mon niveau actuel",
-            ob_interest: "J'aime les histoires de...", ob_interest_sub: "(Plusieurs choix possibles)", ob_goal: "Mon objectif principal",
-            ob_child: "Enfant (-12 ans)", ob_teen: "Adolescent (13-17 ans)", ob_young: "Jeune Adulte (18-25 ans)",
-            ob_adult: "Adulte (26-60 ans)", ob_senior: "Senior (60+ ans)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Débutant (A1-A2)", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermédiaire (B1-B2)", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avancé (C1+)",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mystère", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Histoire", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Voyage",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Me divertir", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Le travail", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Voyager"
-        },
         en: {
             app_title: "LanGo", profile: "Profile", next: "Next",
             new_story: "New Story", new_content: "New Content",
@@ -1043,19 +972,55 @@
             your_email: "Your Email (Optional)", your_message: "Your Message", message_placeholder: "I'd like stories about...",
             cancel: "Cancel", send: "Send", settings: "Settings", interface_lang: "Interface Language", target_lang: "Target Language",
             level: "Level", lvl_beginner: "Beginner (A1-A2)", lvl_intermediate: "Intermediate (B1-B2)", lvl_advanced: "Advanced (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Support the project", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Give Feedback", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Restart Tutorial",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Support the project", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Give Feedback", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Restart Tutorial",
             back: "Back", skip: "Skip",
             tour_welcome: "Welcome! Create a custom story or toggle random mode.", tour_settings_btn: "Change your target language or level here.",
             tour_select_lang: "Select a language, then click OK.", tour_settings_back: "Great! Now click Back to return home.",
             tour_create: "To create a story, type a topic here OR toggle random mode.", tour_click_create: "Perfect! Click Create to start AI.",
             tour_ready: "It's ready! Here is your story.", tour_word: "Tap a word to see its instant translation.",
             tour_para: "Long press to translate the whole sentence.", tour_toggle: "Toggle here to show/hide full translation.",
-            ob_lang: "I want to learn...", ob_age: "My Age Group", ob_level: "My Current Level", ob_interest: "I like stories about...",
+            ob_interface_lang: "App Language", ob_lang: "I want to learn...", ob_age: "My Age Group", ob_level: "My Current Level", ob_interest: "I like stories about...",
             ob_interest_sub: "(Multiple choices)", ob_goal: "My Main Goal",
             ob_child: "Child (-12)", ob_teen: "Teen (13-17)", ob_young: "Young Adult (18-25)", ob_adult: "Adult (26-60)", ob_senior: "Senior (60+)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Beginner", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermediate", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Advanced",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mystery", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> History", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Travel",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fun", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Work", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Travel"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Beginner", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermediate", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Advanced",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mystery", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> History", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Travel",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fun", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Work", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Travel"
+        },
+        fr: {
+            app_title: "LanGo", profile: "Profil", next: "Suivant",
+            new_story: "Nouvelle Histoire", new_content: "Nouveau Contenu",
+            story_mode: "Histoires", chat_mode: "Discussion", chat_in_progress: "Discussion en cours", click_resume: "Cliquez pour reprendre",
+            random_mode: "Mode Aléatoire", input_placeholder: "Ex: Un détective à Paris...",
+            chat_input_placeholder: "Écrivez votre message...", chat_intro_placeholder: "Ex: Au restaurant, Faire les courses...",
+            surprise_subject: "🎲 Sujet Surprise activé", create: "Créer", start_chat: "Discuter",
+            my_library: "Ma Bibliothèque", loading_text: "L'IA écrit et traduit votre histoire...",
+            reader_tips: "Clic Mot = Définition • Clic Espace/Phrase = Traduction complète",
+            continue_reading: "Lire la suite", support_title: "Soutenir LanGo",
+            support_text: "LanGo est gratuit et développé avec passion. Si vous apprenez de nouvelles langues grâce à nous, votre soutien nous aiderait à créer de nouveaux sites et applications !",
+            donate_button: "Faire un don PayPal ou Bancaire", no_thanks: "Non merci, retourner à l'accueil", secure_msg: "Paiement sécurisé géré par PayPal. Aucun don n'est obligatoire.",
+            feedback_title: "Votre avis compte", feedback_desc: "Une suggestion ? Un bug à signaler ? Dites-nous tout pour améliorer LanGo !",
+            your_email: "Votre Email (Optionnel)", your_message: "Votre Message", message_placeholder: "J'aimerais voir plus d'histoires sur...",
+            cancel: "Annuler", send: "Envoyer", settings: "Paramètres", interface_lang: "Langue de l'interface", target_lang: "Langue cible",
+            level: "Niveau", lvl_beginner: "Débutant (A1-A2)", lvl_intermediate: "Intermédiaire (B1-B2)", lvl_advanced: "Avancé (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Soutenir le projet", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Donner son avis", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Relancer le Tutoriel",
+            back: "Retour", skip: "Passer",
+            tour_welcome: "Bienvenue ! Créez une histoire personnalisée ou activez le switch aléatoire.",
+            tour_settings_btn: "Changez votre langue cible ou niveau ici.",
+            tour_select_lang: "Sélectionnez une langue, puis cliquez sur OK.",
+            tour_settings_back: "Super ! Maintenant, cliquez sur Retour pour revenir à l'accueil.",
+            tour_create: "Pour créer une histoire, écrivez un sujet ici OU activez le mode aléatoire.",
+            tour_click_create: "Parfait ! Cliquez sur Créer pour lancer l'IA.",
+            tour_ready: "C'est prêt ! Voici votre histoire.",
+            tour_word: "Touchez un mot pour voir sa traduction instantanée.",
+            tour_para: "Faites un appui long pour traduire la phrase entière.",
+            tour_toggle: "Basculez ici pour afficher/masquer la traduction complète.",
+            ob_interface_lang: "Langue de l'application", ob_lang: "Je veux apprendre...", ob_age: "Ma tranche d'âge", ob_level: "Mon niveau actuel",
+            ob_interest: "J'aime les histoires de...", ob_interest_sub: "(Plusieurs choix possibles)", ob_goal: "Mon objectif principal",
+            ob_child: "Enfant (-12 ans)", ob_teen: "Adolescent (13-17 ans)", ob_young: "Jeune Adulte (18-25 ans)",
+            ob_adult: "Adulte (26-60 ans)", ob_senior: "Senior (60+ ans)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Débutant (A1-A2)", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermédiaire (B1-B2)", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avancé (C1+)",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mystère", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Histoire", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Voyage",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Me divertir", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Le travail", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Voyager"
         },
         es: {
             app_title: "LanGo", profile: "Perfil", next: "Siguiente",
@@ -1073,19 +1038,19 @@
             your_email: "Tu correo (Opcional)", your_message: "Tu mensaje", message_placeholder: "Me gustaría ver historias sobre...",
             cancel: "Cancelar", send: "Enviar", settings: "Ajustes", interface_lang: "Idioma de la interfaz", target_lang: "Idioma objetivo",
             level: "Nivel", lvl_beginner: "Principiante (A1-A2)", lvl_intermediate: "Intermedio (B1-B2)", lvl_advanced: "Avanzado (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Apoyar el proyecto", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dar opinión", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reiniciar Tutorial",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Apoyar el proyecto", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dar opinión", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reiniciar Tutorial",
             back: "Atrás", skip: "Omitir",
             tour_welcome: "¡Bienvenido! Crea una historia personalizada o activa el modo aleatorio.", tour_settings_btn: "Cambia tu idioma objetivo o nivel aquí.",
             tour_select_lang: "Selecciona un idioma y haz clic en OK.", tour_settings_back: "¡Genial! Ahora haz clic en Atrás para volver al inicio.",
             tour_create: "Para crear una historia, escribe un tema aquí O activa el modo aleatorio.", tour_click_create: "¡Perfecto! Haz clic en Crear para iniciar la IA.",
             tour_ready: "¡Está listo! Aquí tienes tu historia.", tour_word: "Toca una palabra para ver su traducción instantánea.",
             tour_para: "Mantén pulsado para traducir toda la frase.", tour_toggle: "Alterna aquí para mostrar/ocultar la traducción completa.",
-            ob_lang: "Quiero aprender...", ob_age: "Mi grupo de edad", ob_level: "Mi nivel actual", ob_interest: "Me gustan las historias de...",
+            ob_interface_lang: "Idioma de la aplicación", ob_lang: "Quiero aprender...", ob_age: "Mi grupo de edad", ob_level: "Mi nivel actual", ob_interest: "Me gustan las historias de...",
             ob_interest_sub: "(Varias opciones)", ob_goal: "Mi objetivo principal",
             ob_child: "Niño (-12 años)", ob_teen: "Adolescente (13-17 años)", ob_young: "Joven (18-25 años)", ob_adult: "Adulto (26-60 años)", ob_senior: "Mayor (60+ años)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Principiante", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermedio", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avanzado",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Misterio", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Ciencia Ficción", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasía", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Historia", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajes",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Divertirme", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Trabajo", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajar"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Principiante", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermedio", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avanzado",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Misterio", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Ciencia Ficción", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasía", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Historia", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajes",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Divertirme", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Trabajo", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajar"
         },
         it: {
             app_title: "LanGo", profile: "Profilo", next: "Avanti",
@@ -1103,19 +1068,19 @@
             your_email: "La tua Email (Opzionale)", your_message: "Il tuo Messaggio", message_placeholder: "Vorrei vedere storie su...",
             cancel: "Annulla", send: "Invia", settings: "Impostazioni", interface_lang: "Lingua dell'interfaccia", target_lang: "Lingua di destinazione",
             level: "Livello", lvl_beginner: "Principiante (A1-A2)", lvl_intermediate: "Intermedio (B1-B2)", lvl_advanced: "Avanzato (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sostieni il progetto", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dai un feedback", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Riavvia il Tutorial",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sostieni il progetto", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dai un feedback", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Riavvia il Tutorial",
             back: "Indietro", skip: "Salta",
             tour_welcome: "Benvenuto! Crea una storia personalizzata o attiva la modalità casuale.", tour_settings_btn: "Cambia qui la tua lingua di destinazione o il livello.",
             tour_select_lang: "Seleziona una lingua, poi clicca su OK.", tour_settings_back: "Ottimo! Ora clicca su Indietro per tornare alla home.",
             tour_create: "Per creare una storia, scrivi un argomento qui OPPURE attiva la modalità casuale.", tour_click_create: "Perfetto! Clicca su Crea per avviare l'IA.",
-            tour_ready: "È pronto! Ecco la tua storia.", tour_word: "Tocca una parola per vedere la sua traduzione istantanea.",
+            tour_ready: "È pronto! Ecco la tua storia.", tour_word: "Toca una parola per vedere la sua traduzione istantanea.",
             tour_para: "Tieni premuto per tradurre l'intera frase.", tour_toggle: "Attiva qui per mostrare/nascondere la traduzione completa.",
-            ob_lang: "Voglio imparare...", ob_age: "La mia fascia d'età", ob_level: "Il mio livello attuale", ob_interest: "Mi piacciono le storie di...",
+            ob_interface_lang: "Lingua dell'app", ob_lang: "Voglio imparare...", ob_age: "La mia fascia d'età", ob_level: "Il mio livello attuale", ob_interest: "Mi piacciono le storie di...",
             ob_interest_sub: "(Scelte multiple)", ob_goal: "Il mio obiettivo principale",
             ob_child: "Bambino (-12 anni)", ob_teen: "Adolescente (13-17 anni)", ob_young: "Giovane (18-25 anni)", ob_adult: "Adulto (26-60 anni)", ob_senior: "Anziano (60+ anni)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Principiante", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermedio", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avanzato",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mistero", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantascienza", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romantico", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Storia", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viaggi",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Divertirmi", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Lavoro", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viaggiare"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Principiante", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermedio", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avanzato",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mistero", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantascienza", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romantico", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Storia", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viaggi",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Divertirmi", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Lavoro", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viaggiare"
         },
         de: {
             app_title: "LanGo", profile: "Profil", next: "Weiter",
@@ -1133,19 +1098,19 @@
             your_email: "Deine E-Mail (Optional)", your_message: "Deine Nachricht", message_placeholder: "Ich würde gerne Geschichten lesen über...",
             cancel: "Abbrechen", send: "Senden", settings: "Einstellungen", interface_lang: "Spracheneinstellung", target_lang: "Zielsprache",
             level: "Niveau", lvl_beginner: "Anfänger (A1-A2)", lvl_intermediate: "Mittelstufe (B1-B2)", lvl_advanced: "Fortgeschritten (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Projekt unterstützen", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Feedback geben", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Tutorial neu starten",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Projekt unterstützen", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Feedback geben", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Tutorial neu starten",
             back: "Zurück", skip: "Überspringen",
             tour_welcome: "Willkommen! Erstelle eine eigene Geschichte oder aktiviere den Zufallsmodus.", tour_settings_btn: "Ändere hier deine Zielsprache oder dein Niveau.",
             tour_select_lang: "Wähle eine Sprache aus und klicke dann auf OK.", tour_settings_back: "Super! Klicke jetzt auf Zurück, um zur Startseite zu gelangen.",
             tour_create: "Um eine Geschichte zu erstellen, tippe ein Thema hier ein ODER aktiviere den Zufallsmodus.", tour_click_create: "Perfekt! Klicke auf Erstellen, um die KI zu starten.",
             tour_ready: "Es ist fertig! Hier ist deine Geschichte.", tour_word: "Tippe auf ein Wort für die sofortige Übersetzung.",
             tour_para: "Lange drücken, um den ganzen Satz zu übersetzen.", tour_toggle: "Hier umschalten, um die gesamte Übersetzung ein-/auszublenden.",
-            ob_lang: "Ich möchte lernen...", ob_age: "Meine Altersgruppe", ob_level: "Mein aktuelles Niveau", ob_interest: "Ich mag Geschichten über...",
+            ob_interface_lang: "App-Sprache", ob_lang: "Ich möchte lernen...", ob_age: "Meine Altersgruppe", ob_level: "Mein aktuelles Niveau", ob_interest: "Ich mag Geschichten über...",
             ob_interest_sub: "(Mehrere Antworten möglich)", ob_goal: "Mein Hauptziel",
             ob_child: "Kind (-12)", ob_teen: "Teenager (13-17)", ob_young: "Junger Erwachsener (18-25)", ob_adult: "Erwachsener (26-60)", ob_senior: "Senior (60+)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Anfänger", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mittelstufe", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fortgeschritten",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Krimi", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romantik", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Geschichte", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reisen",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Spaß", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Arbeit", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reisen"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Anfänger", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mittelstufe", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fortgeschritten",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Krimi", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romantik", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Geschichte", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reisen",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Spaß", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Arbeit", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reisen"
         },
         pt: {
             app_title: "LanGo", profile: "Perfil", next: "Próximo",
@@ -1163,19 +1128,19 @@
             your_email: "Seu Email (Opcional)", your_message: "Sua Mensagem", message_placeholder: "Gostaria de ver histórias sobre...",
             cancel: "Cancelar", send: "Enviar", settings: "Configurações", interface_lang: "Idioma da interface", target_lang: "Idioma alvo",
             level: "Nível", lvl_beginner: "Iniciante (A1-A2)", lvl_intermediate: "Intermediário (B1-B2)", lvl_advanced: "Avançado (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Apoiar o projeto", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dar feedback", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reiniciar Tutorial",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Apoiar o projeto", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dar feedback", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reiniciar Tutorial",
             back: "Voltar", skip: "Pular",
             tour_welcome: "Bem-vindo! Crie uma história personalizada ou ative o modo aleatório.", tour_settings_btn: "Mude seu idioma alvo ou nível aqui.",
             tour_select_lang: "Selecione um idioma e clique em OK.", tour_settings_back: "Ótimo! Agora clique em Voltar para retornar à tela inicial.",
             tour_create: "Para criar uma história, digite um tópico aqui OU ative o modo aleatório.", tour_click_create: "Perfeito! Clique em Criar para iniciar a IA.",
             tour_ready: "Está pronto! Aqui está sua história.", tour_word: "Toque em uma palavra para ver sua tradução instantânea.",
             tour_para: "Pressione e segure para traduzir a frase inteira.", tour_toggle: "Alterne aqui para mostrar/ocultar a tradução completa.",
-            ob_lang: "Eu quero aprender...", ob_age: "Minha faixa etária", ob_level: "Meu nível atual", ob_interest: "Gosto de histórias sobre...",
+            ob_interface_lang: "Idioma do aplicativo", ob_lang: "Eu quero aprender...", ob_age: "Minha faixa etária", ob_level: "Meu nível atual", ob_interest: "Gosto de histórias sobre...",
             ob_interest_sub: "(Várias opções)", ob_goal: "Meu objetivo principal",
             ob_child: "Criança (-12 anos)", ob_teen: "Adolescente (13-17 anos)", ob_young: "Jovem Adulto (18-25 anos)", ob_adult: "Adulto (26-60 anos)", ob_senior: "Sênior (60+ anos)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Iniciante", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermediário", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avançado",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mistério", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Ficção Científica", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasia", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> História", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viagem",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Diversão", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Trabalho", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajar"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Iniciante", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermediário", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avançado",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mistério", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Ficção Científica", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasia", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> História", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viagem",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Diversão", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Trabalho", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajar"
         },
         jp: {
             app_title: "LanGo", profile: "プロフィール", next: "次へ",
@@ -1193,19 +1158,19 @@
             your_email: "メールアドレス（任意）", your_message: "メッセージ", message_placeholder: "こんなストーリーが読みたい...",
             cancel: "キャンセル", send: "送信", settings: "設定", interface_lang: "インターフェース言語", target_lang: "学習する言語",
             level: "レベル", lvl_beginner: "初級 (A1-A2)", lvl_intermediate: "中級 (B1-B2)", lvl_advanced: "上級 (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> プロジェクトを支援", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> フィードバックを送る", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> チュートリアルをやり直す",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> プロジェクトを支援", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> フィードバックを送る", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> チュートリアルをやり直す",
             back: "戻る", skip: "スキップ",
             tour_welcome: "ようこそ！オリジナルのストーリーを作成するか、ランダムモードをオンにしてください。", tour_settings_btn: "ここで学習言語とレベルを変更します。",
             tour_select_lang: "言語を選択し、OKをクリックしてください。", tour_settings_back: "素晴らしい！戻るをクリックしてホームに戻りましょう。",
             tour_create: "ストーリーを作成するには、ここにテーマを入力するかランダムモードをオンにします。", tour_click_create: "完璧です！作成をクリックしてAIを起動しましょう。",
             tour_ready: "準備完了！あなたのストーリーです。", tour_word: "単語をタップすると即座に翻訳が表示されます。",
             tour_para: "長押しすると文全体を翻訳します。", tour_toggle: "ここを切り替えて全文翻訳の表示/非表示を変更します。",
-            ob_lang: "学びたい言語...", ob_age: "年齢層", ob_level: "現在のレベル", ob_interest: "好きなストーリーのジャンル...",
+            ob_interface_lang: "アプリの言語", ob_lang: "学びたい言語...", ob_age: "年齢層", ob_level: "現在のレベル", ob_interest: "好きなストーリーのジャンル...",
             ob_interest_sub: "（複数選択可）", ob_goal: "主な目的",
             ob_child: "子供（12歳以下）", ob_teen: "10代（13-17歳）", ob_young: "若者（18-25歳）", ob_adult: "大人（26-60歳）", ob_senior: "シニア（60歳以上）",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> 初級", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> 中級", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> 上級",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> ミステリー", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> SF", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> ファンタジー", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> 恋愛", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> 歴史", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> 旅行",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> 楽しむ", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> 仕事", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> 旅行する"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> 初級", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> 中級", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> 上級",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> ミステリー", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> SF", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> ファンタジー", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> 恋愛", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> 歴史", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> 旅行",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> 楽しむ", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> 仕事", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> 旅行する"
         },
         ar: {
             app_title: "LanGo", profile: "الملف الشخصي", next: "التالي",
@@ -1223,19 +1188,19 @@
             your_email: "بريدك الإلكتروني (اختياري)", your_message: "رسالتك", message_placeholder: "أود رؤية قصص حول...",
             cancel: "إلغاء", send: "إرسال", settings: "الإعدادات", interface_lang: "لغة الواجهة", target_lang: "اللغة المستهدفة",
             level: "المستوى", lvl_beginner: "مبتدئ (A1-A2)", lvl_intermediate: "متوسط (B1-B2)", lvl_advanced: "متقدم (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> ادعم المشروع", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> تقديم ملاحظات", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> إعادة تشغيل الدليل",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> ادعم المشروع", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> تقديم ملاحظات", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> إعادة تشغيل الدليل",
             back: "رجوع", skip: "تخطي",
             tour_welcome: "مرحباً! قم بإنشاء قصة مخصصة أو قم بتفعيل الوضع العشوائي.", tour_settings_btn: "قم بتغيير لغتك المستهدفة أو مستواك هنا.",
             tour_select_lang: "حدد لغة، ثم انقر على موافق.", tour_settings_back: "رائع! الآن انقر على رجوع للعودة إلى الصفحة الرئيسية.",
             tour_create: "لإنشاء قصة، اكتب موضوعاً هنا أو قم بتفعيل الوضع العشوائي.", tour_click_create: "ممتاز! انقر على إنشاء لبدء الذكاء الاصطناعي.",
             tour_ready: "أصبحت جاهزة! إليك قصتك.", tour_word: "المس أي كلمة لرؤية ترجمتها الفورية.",
             tour_para: "اضغط مطولاً لترجمة الجملة بأكملها.", tour_toggle: "قم بالتبديل هنا لإظهار/إخفاء الترجمة الكاملة.",
-            ob_lang: "أريد أن أتعلم...", ob_age: "فئتي العمرية", ob_level: "مستواي الحالي", ob_interest: "أحب القصص عن...",
+            ob_interface_lang: "لغة التطبيق", ob_lang: "أريد أن أتعلم...", ob_age: "فئتي العمرية", ob_level: "مستواي الحالي", ob_interest: "أحب القصص عن...",
             ob_interest_sub: "(خيارات متعددة)", ob_goal: "هدفي الرئيسي",
             ob_child: "طفل (أقل من 12)", ob_teen: "مراهق (13-17)", ob_young: "شاب (18-25)", ob_adult: "بالغ (26-60)", ob_senior: "كبير في السن (60+)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> مبتدئ", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> متوسط", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> متقدم",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> غموض", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> خيال علمي", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> فنتازيا", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> رومانسية", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> تاريخ", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> سفر",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> للمتعة", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> للعمل", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> للسفر"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> مبتدئ", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> متوسط", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> متقدم",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> غموض", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> خيال علمي", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> فنتازيا", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> رومانسية", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> تاريخ", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> سفر",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> للمتعة", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> للعمل", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> للسفر"
         },
         ru: {
             app_title: "LanGo", profile: "Профиль", next: "Далее",
@@ -1253,26 +1218,22 @@
             your_email: "Ваш Email (необязательно)", your_message: "Ваше сообщение", message_placeholder: "Я бы хотел читать истории о...",
             cancel: "Отмена", send: "Отправить", settings: "Настройки", interface_lang: "Язык интерфейса", target_lang: "Изучаемый язык",
             level: "Уровень", lvl_beginner: "Начинающий (A1-A2)", lvl_intermediate: "Средний (B1-B2)", lvl_advanced: "Продвинутый (C1-C2)",
-            support_project: "<img src='hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Поддержать проект", give_feedback: "<img src='report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Оставить отзыв", restart_tutorial: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Перезапустить обучение",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Поддержать проект", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Оставить отзыв", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Перезапустить обучение",
             back: "Назад", skip: "Пропустить",
             tour_welcome: "Добро пожаловать! Создайте свою историю или включите случайный режим.", tour_settings_btn: "Измените изучаемый язык или уровень здесь.",
             tour_select_lang: "Выберите язык и нажмите ОК.", tour_settings_back: "Отлично! Теперь нажмите Назад, чтобы вернуться на главную.",
             tour_create: "Чтобы создать историю, напишите тему здесь ИЛИ включите случайный режим.", tour_click_create: "Супер! Нажмите Создать для запуска ИИ.",
             tour_ready: "Готово! Вот ваша история.", tour_word: "Нажмите на слово для быстрого перевода.",
             tour_para: "Удерживайте нажатие, чтобы перевести всё предложение.", tour_toggle: "Нажмите здесь, чтобы показать/скрыть полный перевод.",
-            ob_lang: "Я хочу изучать...", ob_age: "Моя возрастная группа", ob_level: "Мой уровень", ob_interest: "Мне нравятся истории о...",
+            ob_interface_lang: "Язык приложения", ob_lang: "Я хочу изучать...", ob_age: "Моя возрастная группа", ob_level: "Мой уровень", ob_interest: "Мне нравятся истории о...",
             ob_interest_sub: "(Можно выбрать несколько)", ob_goal: "Моя главная цель",
             ob_child: "Ребенок (-12 лет)", ob_teen: "Подросток (13-17 лет)", ob_young: "Молодой (18-25 лет)", ob_adult: "Взрослый (26-60 лет)", ob_senior: "Пожилой (60+ лет)",
-            ob_lvl_beg: "<img src='beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Начинающий", ob_lvl_int: "<img src='average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Средний", ob_lvl_adv: "<img src='tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Продвинутый",
-            ob_mys: "<img src='mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Детектив", ob_sci: "<img src='futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Научная фантастика", ob_fan: "<img src='fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Фэнтези", ob_rom: "<img src='love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Романтика", ob_his: "<img src='history.png' width='42' height='42' style='display:inline;vertical-align:middle'> История", ob_tra: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Путешествия",
-            ob_fun: "<img src='idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Развлечение", ob_work: "<img src='work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Работа", ob_trav: "<img src='travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Путешествия"
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Начинающий", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Средний", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Продвинутый",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Детектив", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Научная фантастика", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Фэнтези", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Романтика", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> История", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Путешествия",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Развлечение", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Работа", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Путешествия"
         }
     };
 
-    // Fallback simple
-    UI_TEXTS.es = { ...UI_TEXTS.en, ...UI_TEXTS.es, story_mode: "Historias", chat_mode: "Chat", start_chat: "Chatear" };
-
-    // AJOUT: Langues supplémentaires
     const LANGS = {
         'en': '🇬🇧 English', 'es': '🇪🇸 Español', 'de': '🇩🇪 Deutsch',
         'it': '🇮🇹 Italiano', 'fr': '🇫🇷 Français', 'pt': '🇵🇹 Português',
@@ -1281,19 +1242,17 @@
 
     // Translation helper
     function t(key) {
-        const lang = state.interfaceLang || 'fr';
+        const lang = state.interfaceLang || 'en';
         const dict = UI_TEXTS[lang] || UI_TEXTS['en'];
-        return dict[key] || UI_TEXTS['fr'][key] || UI_TEXTS['en'][key] || key;
+        return dict[key] || UI_TEXTS['en'][key] || key;
     }
 
     function updateInterface() {
-        // Update HTML lang and dir for RTL support
-        const lang = state.interfaceLang || 'fr';
+        const lang = state.interfaceLang || 'en';
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
         document.body.className = `lang-${lang}`;
 
-        // Update text content
         document.querySelectorAll('[data-i18n]').forEach(el => {
             el.innerHTML = t(el.getAttribute('data-i18n'));
         });
@@ -1301,13 +1260,8 @@
             el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
         });
 
-        // Re-render components needing translation
-        if (document.getElementById('view-onboarding').classList.contains('active')) {
-            renderOnboarding();
-        }
-        renderLibrary(); // Update library titles if generic
+        renderLibrary();
 
-        // Check active chat state
         if (state.activeChat && state.activeChat.messages.length > 0) {
             document.getElementById('resume-chat-container').classList.remove('hidden');
         } else {
@@ -1316,6 +1270,12 @@
     }
 
     const ONBOARDING_CONFIG = [
+        {
+            id: 'interfaceLang', title: "ob_interface_lang", type: 'grid', opts: [
+                { v: 'en', l: '🇬🇧 English' }, { v: 'es', l: '🇪🇸 Español' }, { v: 'de', l: '🇩🇪 Deutsch' }, { v: 'it', l: '🇮🇹 Italiano' },
+                { v: 'fr', l: '🇫🇷 Français' }, { v: 'jp', l: '🇯🇵 日本語' }, { v: 'ar', l: '🇸🇦 العربية' }, { v: 'ru', l: '🇷🇺 Русский' }
+            ]
+        },
         {
             id: 'targetLang', title: "ob_lang", type: 'grid', opts: [
                 { v: 'en', l: '🇬🇧 English' }, { v: 'es', l: '🇪🇸 Español' }, { v: 'de', l: '🇩🇪 Deutsch' }, { v: 'it', l: '🇮🇹 Italiano' },
@@ -1346,26 +1306,25 @@
     ];
 
     let state = {
-        targetLang: 'en',
-        interfaceLang: 'fr',
+        targetLang: 'es', // Now default target is different just in case, logic handles it.
+        interfaceLang: 'en',
         level: 'beginner',
         books: [],
         currentBookId: null,
         userProfile: {},
         onboardingDone: false,
         tutorialDone: false,
-        adminNotified: false,
         currentOnboardingStep: 0,
         lastGenerationTime: 0,
-        creationMode: 'story', // 'story' or 'chat'
-        activeChat: null // { messages: [], topic: '' }
+        creationMode: 'story',
+        activeChat: null
     };
 
     let db;
 
     // --- DATABASE (IndexedDB) ---
     const initDB = () => new Promise(resolve => {
-        const r = indexedDB.open('LanGo_DB_v9', 3); // Bump version
+        const r = indexedDB.open('LanGo_DB_v9', 3);
         r.onupgradeneeded = e => {
             const d = e.target.result;
             if (!d.objectStoreNames.contains('books')) d.createObjectStore('books', { keyPath: 'id' });
@@ -1391,10 +1350,9 @@
         q.onerror = () => r([]);
     });
 
-    // --- API GEMINI (ROBUST) ---
+    // --- API GEMINI ---
     async function callAI(prompt, systemPrompt) {
-        // 1. CORRECTION ICI : Passage en 'v1' (stable) et 'gemini-1.5-flash'
-        const url = ` https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
         const payload = {
             contents: [{ parts: [{ text: prompt }] }],
@@ -1402,8 +1360,7 @@
             generationConfig: { responseMimeType: "application/json" }
         };
 
-        // Boucle de réessai (Retry pattern)
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 5; i++) {
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -1411,10 +1368,9 @@
                     body: JSON.stringify(payload)
                 });
 
-                // 2. GESTION DES 503 : Si le serveur sature, on force le "catch" pour réessayer
                 if (!response.ok) {
-                    if (response.status === 503) {
-                        throw new Error("503_SURCHARGE_SERVEUR");
+                    if (response.status === 503 || response.status === 429) {
+                        throw new Error(`Erreur ${response.status}_Surcharge`);
                     }
                     throw new Error(`HTTP ${response.status}`);
                 }
@@ -1426,7 +1382,6 @@
 
                 let text = data.candidates[0].content.parts[0].text;
 
-                // CLEANUP MARKDOWN IF PRESENT (Common issue with Gemini)
                 if (text.startsWith('```json')) {
                     text = text.replace(/^```json\s*/, '').replace(/\s*```$/, '');
                 } else if (text.startsWith('```')) {
@@ -1442,19 +1397,16 @@
 
             } catch (error) {
                 console.warn(`Tentative ${i + 1} échouée:`, error.message);
-
-                if (i === 2) {
-                    // Si on échoue 3 fois de suite, on prévient l'utilisateur
-                    alert("Le serveur de Google est très sollicité actuellement. Veuillez réessayer dans un instant.");
-                    throw new Error(`Échec de l'appel API après 3 tentatives.`);
+                if (i === 4) {
+                    alert("Le serveur est très sollicité actuellement. Veuillez réessayer dans un instant.");
+                    throw new Error(`Échec de l'appel API après 5 tentatives.`);
                 }
-                // Retrait exponentiel : on attend 1s, puis 2s avant de retenter
                 await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
             }
         }
     }
 
-    // --- TUTORIAL ENGINE (SAME AS BEFORE) ---
+    // --- TUTORIAL ENGINE ---
     const tour = {
         active: false, stepIndex: 0, _boundUpdate: null,
         steps: [
@@ -1561,10 +1513,9 @@
     // --- APP LOGIC ---
 
     function setCreationMode(mode) {
-        // PROTECTION TUTO : Empêcher le mode chat si le tuto est actif
         if (mode === 'chat' && tour.active) {
             const btn = document.getElementById('mode-chat');
-            showPopover(btn, "Terminez le tutoriel d'abord !");
+            showPopover(btn, "Finish the tutorial first!");
             setTimeout(hidePopover, 2000);
             return;
         }
@@ -1608,7 +1559,7 @@
         window.scrollTo(0, 0);
 
         if (viewId === 'view-home') {
-            updateInterface(); // Checks for active chat
+            updateInterface();
             if (tour.active && tour.steps[tour.stepIndex].id === 'settings-back-btn') tour.next();
         } else if (viewId === 'view-settings') {
             if (tour.active && tour.steps[tour.stepIndex].id === 'settings-btn') tour.next();
@@ -1617,7 +1568,7 @@
         }
     }
 
-    // --- ONBOARDING AMÉLIORÉ ---
+    // --- ONBOARDING ---
     function renderOnboarding() {
         const step = ONBOARDING_CONFIG[state.currentOnboardingStep];
         const div = document.getElementById('onboarding-container');
@@ -1631,8 +1582,8 @@
         document.getElementById('onboarding-next-btn').disabled = !isValid;
 
         let html = `<div class="anim-item-enter" style="animation-delay: 0ms">`;
-        html += `<h2 class="text-2xl font-bold text-white text-center mb-1">${t(step.title)}</h2>`;
-        if (step.subtitle) html += `<p class="text-center text-slate-400 text-xs mb-6">${t(step.subtitle)}</p>`;
+        html += `<h2 class="text-2xl font-bold text-white text-center mb-1" data-i18n="${step.title}">${t(step.title)}</h2>`;
+        if (step.subtitle) html += `<p class="text-center text-slate-400 text-xs mb-6" data-i18n="${step.subtitle}">${t(step.subtitle)}</p>`;
         else html += `<div class="mb-6"></div>`;
         html += `</div>`;
         html += `<div class="${step.type === 'grid' ? 'qcm-grid' : 'space-y-3'}">`;
@@ -1641,8 +1592,14 @@
             const isSel = Array.isArray(val) ? val.includes(o.v) : val === o.v;
             const isMulti = step.multi ? 'multi-selected' : '';
             const delay = 100 + (index * 50);
-            const label = (step.id === 'targetLang') ? o.l : t(o.l);
-            html += `<div class="qcm-option ${isSel ? 'selected ' + isMulti : ''} anim-item-enter" style="animation-delay: ${delay}ms" onclick="selectOb('${step.id}', '${o.v}', this)">${label}</div>`;
+
+            const isRaw = (step.id === 'targetLang' || step.id === 'interfaceLang');
+            const labelContent = isRaw ? o.l : t(o.l);
+            const dataAttr = isRaw ? '' : `data-i18n="${o.l}"`;
+
+            html += `<div class="qcm-option ${isSel ? 'selected ' + isMulti : ''} anim-item-enter" style="animation-delay: ${delay}ms" onclick="selectOb('${step.id}', '${o.v}', this)">
+                <span ${dataAttr}>${labelContent}</span>
+            </div>`;
         });
         html += `</div>`;
         div.classList.remove('anim-exit');
@@ -1671,6 +1628,12 @@
             el.parentElement.querySelectorAll('.qcm-option').forEach(e => e.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('onboarding-next-btn').disabled = false;
+
+            if (k === 'interfaceLang') {
+                state.interfaceLang = v;
+                saveSet('interfaceLang', v);
+                updateInterface(); // Instantly update UI texts
+            }
         }
         el.style.transform = "scale(0.95)"; setTimeout(() => el.style.transform = "", 150);
     };
@@ -1686,7 +1649,6 @@
         saveSet('targetLang', state.targetLang);
         saveSet('level', state.level);
         saveSet('onboardingDone', true);
-        notifyAdminUserCount();
         changeView('view-home');
         updateInterface();
         setTimeout(() => tour.start(), 1000);
@@ -1752,7 +1714,6 @@
             return;
         }
 
-        // Cooldown Logic
         const now = Date.now();
         if (state.lastGenerationTime && (now - state.lastGenerationTime < 60000)) {
             const remaining = Math.ceil((60000 - (now - state.lastGenerationTime)) / 1000);
@@ -1766,13 +1727,11 @@
             return;
         }
 
-        // HANDLE CHAT MODE
         if (state.creationMode === 'chat') {
             startChat(isRandom ? null : topic);
             return;
         }
 
-        // HANDLE STORY MODE (EXISTING LOGIC)
         document.getElementById('generate-btn').disabled = true;
         document.getElementById('loader').classList.remove('hidden');
 
@@ -1792,8 +1751,8 @@
         1. The "title" MUST be in ${targetLanguageName}.
         2. Adapt the tone, complexity, and themes to fit the age group: ${ageGroup}.
         3. Output STRICT JSON with this schema:
-        { "title": "Title in ${targetLanguageName}", "paragraphs": [ { "sentences": [ { "text": "A single sentence in ${targetLanguageName}.", "translation": "The French translation of that single sentence." } ], "glossary": { "word": "french_translation", "another": "translation" } } ] }
-        4. The 'glossary' object MUST contain a French translation for EVERY SINGLE WORD in the 'sentences' texts.
+        { "title": "Title in ${targetLanguageName}", "paragraphs": [ { "sentences": [ { "text": "A single sentence in ${targetLanguageName}.", "translation": "The English translation of that single sentence." } ], "glossary": { "word": "english_translation", "another": "translation" } } ] }
+        4. The 'glossary' object MUST contain an English translation for EVERY SINGLE WORD in the 'sentences' texts.
         5. Glossary keys MUST be lowercase, stripped of punctuation.`;
 
         const userPrompt = isRandom ? "Generate a creative, engaging short story (3 or 4 paragraphs). Surprise me." : `Write a story (3 or 4 paragraphs) about: "${topic}".`;
@@ -1837,7 +1796,6 @@
 
     // --- CHAT LOGIC ---
     function startChat(topic) {
-        // Setup new chat
         state.activeChat = {
             messages: [],
             topic: topic || 'Random Situation',
@@ -1846,13 +1804,11 @@
         saveSet('activeChat', state.activeChat);
         changeView('view-chat');
         document.getElementById('chat-title').textContent = topic ? topic : t('random_mode');
-
-        // Initial AI Message
         sendChatToAI(true);
     }
 
     function resetChat() {
-        if (confirm("Démarrer une nouvelle discussion ? L'actuelle sera perdue.")) {
+        if (confirm("Start a new chat? The current one will be lost.")) {
             changeView('view-home');
         }
     }
@@ -1866,15 +1822,9 @@
         container.innerHTML = state.activeChat.messages.map((m, idx) => {
             let contentHTML = m.text;
 
-            // Rend le texte interactif SEULEMENT pour l'IA (Langue Cible)
             if (m.role === 'ai') {
-                // Si on a des données JSON structurées (nouveau format)
                 if (m.data) {
-                    // Utilisation des mêmes classes que le Reader (word-interactive, sentence-wrapper)
-                    // Le texte est traité comme une seule phrase/paragraphe pour simplifier
                     let wordsHTML = '';
-
-                    // Tokenisation (Simplifiée par rapport au reader mais fonctionnelle)
                     if (currentLang === 'jp') {
                         let segments = [];
                         if (window.Intl && Intl.Segmenter) {
@@ -1892,8 +1842,6 @@
                             return `<span class="word-interactive" data-clean="${clean}" data-msg-idx="${idx}">${w}</span>`;
                         }).join(' ');
                     }
-
-                    // Wrap dans sentence-wrapper
                     contentHTML = `<span class="sentence-wrapper" data-msg-idx="${idx}">${wordsHTML}</span>`;
                 }
             }
@@ -1905,7 +1853,6 @@
             `;
         }).join('');
 
-        // Scroll to bottom
         container.scrollTop = container.scrollHeight;
     }
 
@@ -1915,20 +1862,17 @@
         const text = input.value.trim();
         if (!text) return;
 
-        // Add user message
         state.activeChat.messages.push({ role: 'user', text: text });
         input.value = '';
         renderChat();
         saveSet('activeChat', state.activeChat);
 
-        // Call AI
         await sendChatToAI(false);
     }
 
     async function sendChatToAI(isIntro) {
         const container = document.getElementById('chat-messages');
 
-        // Show typing indicator
         const typingId = 'typing-' + Date.now();
         container.insertAdjacentHTML('beforeend', `
             <div id="${typingId}" class="chat-bubble ai typing-indicator">
@@ -1960,8 +1904,8 @@
         Output STRICT JSON:
         {
           "reply": "The response in ${targetLang}",
-          "translation": "The full translation of the reply in French (user's language)",
-          "glossary": { "word_in_target": "translation_in_french", "another": "translation" }
+          "translation": "The full translation of the reply in English",
+          "glossary": { "word_in_target": "translation_in_english", "another": "translation" }
         }
         Glossary must include translations for key words in the reply.
         `;
@@ -1969,14 +1913,11 @@
         const prompt = isIntro ? "Start the conversation." : `Conversation History:\n${history}\n\nRespond to the last user message.`;
 
         try {
-            // Call AI expecting structured JSON now
             const data = await callAI(prompt, sysPrompt);
             let replyText = data.reply || data.content || "Error...";
 
-            // Remove typing indicator
             document.getElementById(typingId).remove();
 
-            // Save message with metadata for translation features
             state.activeChat.messages.push({
                 role: 'ai',
                 text: replyText,
@@ -2002,14 +1943,14 @@
         loadBooks().then(books => {
             state.books = books;
             if (!books.length) {
-                list.innerHTML = `<div class="text-center py-10 opacity-30"><div class="text-4xl mb-2"><img src="history.png" width="64" height="64" style="display:inline"></div>Empty</div>`;
+                list.innerHTML = `<div class="text-center py-10 opacity-30"><div class="text-4xl mb-2"><img src="assets/history.png" width="64" height="64" style="display:inline"></div>Empty</div>`;
                 return;
             }
             list.innerHTML = books.map(b => `
                 <li onclick="openBookId('${b.id}')" class="glass-panel p-4 rounded-xl cursor-pointer hover:bg-slate-800 transition-colors flex justify-between items-center group relative overflow-hidden">
                     <div class="flex items-center gap-4 z-10 w-full overflow-hidden">
                         <div class="w-14 h-14 flex-shrink-0 rounded-full bg-violet-500/20 flex items-center justify-center text-lg">
-                            ${b.rating === 'like' ? '<img src="love.png" width="38" height="38">' : (b.desc.includes('🎲') ? '<img src="random.png" width="38" height="38">' : '<img src="history.png" width="38" height="38">')}
+                            ${b.rating === 'like' ? '<img src="assets/love.png" width="38" height="38">' : (b.desc.includes('🎲') ? '<img src="assets/random.png" width="38" height="38">' : '<img src="assets/history.png" width="38" height="38">')}
                         </div>
                         <div class="truncate">
                             <h3 class="font-bold text-white truncate">${b.title}</h3>
@@ -2096,7 +2037,7 @@
             if (lastPara.sentences) lastText = lastPara.sentences.map(s => s.text).join(' ');
         }
         const sysPrompt = `Continue the story coherently. Target Language: ${LANGS[state.targetLang]}.
-        Output JSON schema: { "paragraphs": [ { "sentences": [ { "text": "...", "translation": "..." } ], "glossary": { "word": "french_translation" } } ] }`;
+        Output JSON schema: { "paragraphs": [ { "sentences": [ { "text": "...", "translation": "..." } ], "glossary": { "word": "english_translation" } } ] }`;
         const userPrompt = `Previous context: "...${lastText}". Continue (2-3 paragraphs).`;
 
         try {
@@ -2145,7 +2086,6 @@
         const wordClean = el.dataset.clean;
         let translation = null;
 
-        // CAS 1: Mode READER (Book)
         const paraIdx = el.dataset.paraIdx ? parseInt(el.dataset.paraIdx) : null;
         if (paraIdx !== null) {
             const book = state.books.find(b => b.id === state.currentBookId);
@@ -2155,7 +2095,6 @@
                 else { const key = Object.keys(glossary).find(k => k.toLowerCase() === wordClean || k.toLowerCase().includes(wordClean)); if (key) translation = glossary[key]; }
             }
         }
-        // CAS 2: Mode CHAT
         else if (el.dataset.msgIdx !== undefined) {
             const msgIdx = parseInt(el.dataset.msgIdx);
             const msg = state.activeChat.messages[msgIdx];
@@ -2168,7 +2107,7 @@
 
         const displayWord = el.innerText.replace(/[.,!?;:]/g, '');
         if (translation) showPopover(el, `<div class="text-xl font-bold capitalize mb-1 text-white">${displayWord}</div><div class="text-violet-300">${translation}</div>`);
-        else showPopover(el, `<div class="text-xl font-bold capitalize mb-1 text-white">${displayWord}</div><div class="text-slate-400 text-xs">Info non dispo</div>`);
+        else showPopover(el, `<div class="text-xl font-bold capitalize mb-1 text-white">${displayWord}</div><div class="text-slate-400 text-xs">N/A</div>`);
     }
 
     function handleSentence(el) {
@@ -2178,7 +2117,6 @@
 
         let trans = null;
 
-        // CAS 1: Mode READER
         if (sentenceEl.dataset.paraIdx !== undefined) {
             const paraIdx = parseInt(sentenceEl.dataset.paraIdx);
             const sentIdx = parseInt(sentenceEl.dataset.sentIdx);
@@ -2187,7 +2125,6 @@
                 trans = book.paragraphs[paraIdx].sentences[sentIdx].translation;
             }
         }
-        // CAS 2: Mode CHAT
         else if (sentenceEl.dataset.msgIdx !== undefined) {
             const msgIdx = parseInt(sentenceEl.dataset.msgIdx);
             const msg = state.activeChat.messages[msgIdx];
@@ -2201,6 +2138,7 @@
             showPopover(el, `<div class="text-sm text-slate-300 italic leading-relaxed text-left">"${trans}"</div>`);
         }
     }
+
     function showPopover(el, html) {
         const pop = document.getElementById('popover'); const content = document.getElementById('popover-content'); const arrow = document.getElementById('popover-arrow');
         content.innerHTML = html; pop.classList.remove('hidden'); pop.style.opacity = '0';
@@ -2215,6 +2153,7 @@
         else { arrow.style.top = '-8px'; arrow.style.bottom = 'auto'; arrow.style.borderWidth = '1px 0 0 1px'; }
         requestAnimationFrame(() => { pop.style.opacity = '1'; });
     }
+
     function hidePopover() {
         const pop = document.getElementById('popover');
         if (pop) { pop.style.opacity = '0'; setTimeout(() => { pop.classList.add('hidden'); document.querySelectorAll('.word-selected, .sentence-highlight').forEach(e => e.classList.remove('word-selected', 'sentence-highlight')); }, 200); }
@@ -2228,6 +2167,7 @@
         if (r === 'like') like.className = "p-4 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-500 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]";
         if (r === 'dislike') dislike.className = "p-4 rounded-xl bg-red-500/20 border border-red-500 text-red-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]";
     }
+
     function rateBook(v) {
         const b = state.books.find(x => x.id === state.currentBookId);
         if (b) { b.rating = (b.rating === v) ? null : v; saveBook(b); updateFeedbackButtons(b.rating); }
@@ -2255,7 +2195,6 @@
         if (s.userProfile) state.userProfile = s.userProfile;
         if (s.lastGenerationTime) state.lastGenerationTime = s.lastGenerationTime;
         if (s.activeChat) state.activeChat = s.activeChat;
-        state.adminNotified = !!s.adminNotified_v1;
         state.onboardingDone = !!s.onboardingDone;
         state.tutorialDone = !!s.tutorialDone;
 
@@ -2263,7 +2202,7 @@
         updateInterface();
 
         if (!state.onboardingDone) { changeView('view-onboarding'); renderOnboarding(); }
-        else { notifyAdminUserCount(); changeView('view-home'); startCooldownButton(); if (!state.tutorialDone) setTimeout(() => tour.start(), 800); }
+        else { changeView('view-home'); startCooldownButton(); if (!state.tutorialDone) setTimeout(() => tour.start(), 800); }
     })();
 
 </script>
