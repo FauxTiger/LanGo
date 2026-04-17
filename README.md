@@ -1,115 +1,184 @@
-# <img src="assets/logo.png" width="32" vertical-align="middle"> LanGo: AI-Powered Language Learning
+<div align="center">
 
-**LanGo** is an interactive and intelligent web application designed to transform language learning into an immersive and personalized experience. By integrating AI technologies, the application generates content tailored to your level and interests.
+<img src="LanGo web/assets/logo.png" width="72" alt="LanGo Logo" />
+
+# LanGo
+
+### Next-Generation AI Language Learning
+
+*Bridging the gap between static curricula and real-world fluency*
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Android-green.svg)]()
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
+[![Android](https://img.shields.io/badge/Google%20Play-Available-orange.svg)]()
+
+</div>
+
+---
+
+## Overview
+
+LanGo is a cross-platform intelligent learning ecosystem powered by cutting-edge Generative AI. Unlike traditional language apps built on repetitive, pre-defined curricula, LanGo generates content that evolves dynamically with the learner's proficiency — from complete beginner **(A1)** to near-native speaker **(C2)**.
+
+By leveraging Large Language Models (LLMs), LanGo delivers context-aware storytelling, real-time conversational practice, and personalized vocabulary calibration — all within a single cohesive experience.
+
+---
+
+## Table of Contents
+
+- [Key Features](#-key-features)
+- [Architecture & Tech Stack](#%EF%B8%8F-architecture--tech-stack)
+- [Project Structure](#-project-structure)
+- [Installation & Deployment](#-installation--deployment)
+- [UI/UX Philosophy](#-uiux-philosophy)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
 ## ✨ Key Features
 
-### 📖 Story Mode
+### 🧠 Generative Learning Engines
 
-Generate unique stories based on your preferences. Whether you enjoy detective thrillers or travel journals, the AI creates custom text to help you progress.
+| Feature | Description |
+|---|---|
+| **AI Story Mode** | Dynamic narrative generation across user-selected genres — Mystery, Fantasy, History, and more. Stories adapt to vocabulary level and learning goals. |
+| **Live Discussion AI** | A pressure-free conversational sandbox powered by NLP, enabling authentic dialogue practice without social anxiety. |
 
-### 💬 Discussion Mode
+### 📖 Smart Interactive Reader
 
-Practice real-time conversation with an AI companion. Perfect for breaking the language barrier and building confidence.
+- **Tokenized Interaction** — Every word and sentence is tappable. Instant translations and full dictionary definitions are a single tap away.
+- **Multi-Script Rendering** — Custom rendering engines support complex writing systems including Japanese (Kanji / Kana) and Arabic (RTL layout).
 
-### 🧠 Smart Interactive Reader
+### ⚙️ Personalized Onboarding
 
-- **Instant Translation:** Click on a sentence to see its translation.
-- **Integrated Dictionary:** Can't remember a word? Click on it to get its definition.
-- **Multilingual Support:** Optimized font management for Japanese and Arabic (including RTL support).
-
-### 🛠️ Full Customization
-
-- **Onboarding Journey:** A guided setup to define your goals from the start.
-- **Advanced Settings:** Switch target languages and adjust your level (A1 to C2).
+A comprehensive **User Journey** setup that calibrates AI difficulty and interest mapping from the very first launch, ensuring relevant content from day one.
 
 ---
 
-## 🚀 Technologies
+## 🛠️ Architecture & Tech Stack
 
-The application is built on a modern and lightweight stack:
+### 🌐 Web (SPA)
 
-- **Frontend:** HTML5, CSS3 (Glassmorphism design), JavaScript (ES6+).
-- **CSS Framework:** [Tailwind CSS](https://tailwindcss.com/) for a responsive and elegant look.
-- **Third-party Services:**
-  - **EmailJS:** For user support and feedback.
-  - **Google Fonts:** Using _Poppins_, _Lora_, _Noto Sans JP_, and _Noto Naskh Arabic_.
-  - **IndexedDB:** For local progress saving.
+| Layer | Technology |
+|---|---|
+| Core | HTML5, JavaScript (ES6+) |
+| Styling | Tailwind CSS — Glassmorphic design system |
+| Persistence | IndexedDB (client-side data management) |
+| Communications | EmailJS (feedback & cloud integration) |
 
----
+### 🤖 Android (Native)
 
-## 📦 Installation & Usage
-
-The application is a **Single Page Application (SPA)**. No backend server is required for rendering:
-
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/your-username/lango.git](https://github.com/your-username/lango.git)
-   ```
-2. Open `index.html` in your browser.
-3. Configure your API keys in the `apiKey` constant on **line 992** of the **index.html** file and start learning!
+| Layer | Technology |
+|---|---|
+| Language | Kotlin (100%) |
+| UI Framework | Material Design 3 (Material You) |
+| Build System | Gradle with Kotlin DSL + ProGuard optimization |
+| Assets | Shared pipeline with the Web module |
 
 ---
 
-## 🎨 User Interface
+## 📂 Project Structure
 
-The interface was designed for focus and visual comfort:
+The repository is organized as a **monorepo** for seamless cross-platform synchronization:
 
-- **Native Dark Mode** (Slate 900 / Indigo).
-- **Smooth Animations** for transitions between menus.
-- **Responsive Design** (Mobile, Tablet, Desktop).
-
----
-
-## 🤝 Contribution & Support
-
-If you would like to contribute or have suggestions:
-
-- Contact me via email at fauxtigergames@gmail.com .
-- Make a donation via the integrated **PayPal** button to support development.
-- Install the app on the **Play Store**: https://play.google.com/store/apps/details?id=com.app.lango
-
----
-
-# 📖 License
-
-This project is distributed under the **GNU General Public License v3.0**.
-
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen.svg)
+```
+.
+├── LanGo android/              # Native Android Project
+│   ├── app/
+│   │   ├── src/main/           # Kotlin source files & AndroidManifest
+│   │   └── assets/assets/      # Shared visual assets (logo, states, etc.)
+│   └── build.gradle.kts        # Build configuration
+│
+├── LanGo web/                  # Web Application (SPA)
+│   ├── assets/                 # Web-optimized static assets
+│   └── index.html              # Main application entry point
+│
+└── README.md
+```
 
 ---
 
-### 📜 Summary
+## 🚀 Installation & Deployment
 
-The **GPLv3** is a strong "copyleft" license that ensures the software remains free. It grants you the following rights:
+### Web
 
-- **🔓 Freedom of use:** You can use this software for any purpose.
-- **🛠️ Freedom to modify:** You can modify the source code to suit your needs.
-- **📢 Freedom to distribute:** You can redistribute the original code or your modified versions.
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/lango.git
 
-### ⚠️ Major Obligations
+# 2. Navigate to the web directory
+cd "LanGo web"
 
-If you distribute a modified version of this software:
+# 3. Open index.html in any modern browser
+```
 
-1. **Open Source:** You must make the source code public.
-2. **Same License:** You must redistribute your project under the **same license** (GPLv3).
-3. **Transparency:** You must clearly indicate the changes made and keep the original copyright notices.
+> **API Key:** Open `index.html` and locate the `apiKey` constant (around line 992) to insert your credentials before running.
 
----
+### Android
 
-> [!IMPORTANT]
-> **No Warranty:** This software is provided "as is", without warranty of any kind. The authors cannot be held liable for any damages arising from its use.
-
----
-
-### 🔗 Useful Links
-
-- [Read the full license text](https://www.gnu.org/licenses/gpl-3.0.html)
-- [GNU GPL License FAQ](https://www.gnu.org/licenses/gpl-faq.html)
+1. Open the `LanGo android/` directory in **Android Studio**.
+2. Run **Gradle Sync** to resolve dependencies.
+3. Deploy to a physical device or emulator running **API 26+**.
 
 ---
 
-_Copyright (c) 2026 - [FauxTiger]_
+## 🎨 UI/UX Philosophy
+
+LanGo's interface is built around three core principles:
+
+- **Visual Comfort** — A deep "Deep Space" theme (Slate 900) minimizes eye strain during extended study sessions.
+- **Responsiveness** — Fluid, adaptive layouts spanning from 6.7" mobile screens to 32" desktop monitors.
+- **Micro-interactions** — Subtle CSS and Kotlin animations provide tactile, satisfying feedback throughout the experience.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome and appreciated. To get started:
+
+```bash
+# 1. Fork the repository
+
+# 2. Create a feature branch
+git checkout -b feature/your-feature-name
+
+# 3. Commit your changes
+git commit -m "feat: add your feature description"
+
+# 4. Push to your fork
+git push origin feature/your-feature-name
+
+# 5. Open a Pull Request
+```
+
+Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages where possible.
+
+---
+
+## 📬 Support
+
+| Channel | Link |
+|---|---|
+| Email | fauxtigergames@gmail.com |
+| Google Play | Available on the Play Store |
+| Donate | PayPal portal integrated directly in the app |
+
+---
+
+## 📜 License
+
+Distributed under the **GNU General Public License v3.0**.
+
+This license guarantees your freedom to use, share, and modify this software — ensuring it remains free for all users.
+
+→ [Read the full license text](https://www.gnu.org/licenses/gpl-3.0.html)
+
+---
+
+<div align="center">
+
+Copyright © 2026 **FauxTiger**. All rights reserved.
+
+</div>
