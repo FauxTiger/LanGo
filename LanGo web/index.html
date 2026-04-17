@@ -1,0 +1,2211 @@
+<!-- Copyright (c) 2026 FauxTiger -->
+<!-- This software is distributed under the GNU GPLv3 license. -->
+<!-- The code is provided "AS IS", without any warranty. -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <title>LanGo: Language Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts for Japanese (Noto Sans JP) and Arabic (Noto Naskh Arabic) -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap"
+            rel="stylesheet">
+
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #8b5cf6;
+            /* Purple */
+            --accent-hover: #7c3aed;
+            --highlight: #f472b6;
+            /* Pink */
+            --font-main: 'Poppins', sans-serif;
+            --font-book: 'Lora', serif;
+        }
+
+        /* RTL Support (Arabic) */
+        html[dir="rtl"] {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .animate-slide-in-r {
+            animation-name: slideInLeft;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Font adjustment based on language */
+        body.lang-ja, body.lang-jp {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        body.lang-ar {
+            font-family: 'Noto Naskh Arabic', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+        }
+
+        /* --- GENERAL ANIMATIONS --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse-border {
+            0% {
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            15% {
+                transform: translateX(-6px) rotate(-2deg);
+            }
+
+            30% {
+                transform: translateX(5px) rotate(2deg);
+            }
+
+            45% {
+                transform: translateX(-4px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translateX(3px) rotate(1deg);
+            }
+
+            75% {
+                transform: translateX(-2px);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .animate-slide-in-r {
+            animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+            border-color: #ef4444 !important;
+        }
+
+        /* --- ONBOARDING ANIMATIONS --- */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        .anim-exit {
+            animation: fadeOut 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+            pointer-events: none;
+        }
+
+        .anim-item-enter {
+            opacity: 0;
+            animation: slideUpFade 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* --- UI COMPONENTS --- */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            filter: grayscale(1);
+            cursor: not-allowed;
+        }
+
+        /* --- QCM / ONBOARDING UI --- */
+        .qcm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .qcm-option {
+            cursor: pointer;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(30, 41, 59, 0.4);
+            padding: 1rem;
+            border-radius: 1rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .qcm-option:active {
+            transform: scale(0.98);
+        }
+
+        .qcm-option.selected {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.15);
+            color: white;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+        }
+
+        .qcm-option.multi-selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            font-size: 0.8rem;
+            color: var(--highlight);
+        }
+
+        /* --- READER --- */
+        #book-text {
+            font-family: var(--font-book);
+            font-size: 1.15rem;
+            line-height: 1.9;
+        }
+
+        .word-interactive {
+            cursor: pointer;
+            border-radius: 3px;
+            padding: 0 1px;
+            transition: background 0.1s;
+            -webkit-touch-callout: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .word-interactive:active {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .word-selected {
+            background: rgba(139, 92, 246, 0.3);
+            color: white;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .sentence-highlight {
+            background: rgba(139, 92, 246, 0.15);
+            border-radius: 4px;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
+        }
+
+        .sentence-wrapper {
+            display: inline;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .sentence-wrapper:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .sentence-wrapper.sentence-highlight {
+            background: rgba(139, 92, 246, 0.15);
+            border-radius: 4px;
+        }
+
+        .translated-block {
+            font-family: var(--font-book);
+            color: #cbd5e1;
+            font-style: italic;
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* --- CHAT STYLES --- */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 140px);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .chat-bubble.user {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+        }
+
+        .chat-bubble.ai {
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            font-family: var(--font-book);
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-muted);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+            margin: 0 1px;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- TUTORIAL (BLOCKING & SPOTLIGHT) --- */
+        #guided-tour-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+
+        #guided-tour-layer.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0s;
+        }
+
+        .tour-blocker {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            pointer-events: auto;
+            z-index: 101;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .tour-spotlight {
+            position: absolute;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            animation: pulse-border 2s infinite;
+            z-index: 102;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+
+        .tour-tooltip {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            border-radius: 16px;
+            width: 280px;
+            color: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: top 0.3s ease, left 0.3s ease;
+            z-index: 105;
+            pointer-events: auto;
+        }
+
+        /* --- UTILS --- */
+        .view-section {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .view-section.active {
+            display: flex;
+        }
+
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                color: rgba(0, 0, 0, 0);
+            }
+
+            40% {
+                color: white;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Mode Switcher */
+        .mode-switch {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .mode-option {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .mode-option.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+<header
+        class="fixed top-0 left-0 right-0 z-40 px-4 pt-6 pb-3 flex justify-between items-center bg-[var(--bg)]/95 backdrop-blur border-b border-white/5">
+    <div class="flex items-center cursor-pointer" onclick="changeView('view-home')">
+        <div
+                class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center mr-2 shadow-lg">
+            <span class="font-bold text-white">L</span>
+        </div>
+        <span class="font-bold text-lg text-white" data-i18n="app_title">LanGo</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+        <button onclick="changeView('view-donate')"
+                class="p-2 rounded-full hover:bg-pink-500/10 text-pink-400 hover:text-pink-300 transition-colors"
+                title="Support">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+        </button>
+
+        <button id="settings-btn" onclick="openSettings()"
+                class="p-2 rounded-full hover:bg-white/10 transition-colors">
+            <svg class="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+    </div>
+</header>
+<div class="h-20"></div>
+
+<!-- ONBOARDING -->
+<div id="view-onboarding" class="view-section items-center justify-center p-4">
+    <div class="max-w-md w-full relative">
+        <div class="flex justify-between text-xs text-slate-400 mb-2 font-medium">
+            <span data-i18n="profile">Profile</span>
+            <span id="onboarding-step-count">1/6</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2 rounded-full mb-8 overflow-hidden">
+            <div id="onboarding-progress" class="bg-violet-500 h-full transition-all duration-300"
+                 style="width: 16%"></div>
+        </div>
+
+        <div id="onboarding-container" class="min-h-[350px] flex flex-col justify-center">
+        </div>
+
+        <div class="flex gap-3 mt-8">
+            <button id="onboarding-back-btn"
+                    class="px-4 py-4 rounded-xl bg-slate-800 text-slate-400 hover:text-white disabled:opacity-0 transition-all"
+                    onclick="prevOnboardingStep()" disabled>
+                ←
+            </button>
+            <button id="onboarding-next-btn"
+                    class="flex-grow btn-primary py-4 rounded-xl font-bold text-white shadow-lg disabled:opacity-50 transition-all"
+                    onclick="nextOnboardingStep()" disabled data-i18n="next">
+                Next
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- HOME -->
+<div id="view-home" class="view-section items-center p-4">
+    <div class="w-full max-w-2xl animate-fade-in">
+
+        <div id="creation-container" class="glass-panel p-4 rounded-2xl mb-8 relative z-10 border border-white/5">
+            <div class="mode-switch">
+                <div class="mode-option active" id="mode-story" onclick="setCreationMode('story')"
+                     data-i18n="story_mode">Stories</div>
+                <div class="mode-option" id="mode-chat" onclick="setCreationMode('chat')" data-i18n="chat_mode">
+                    Chat</div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4 px-1">
+                    <span id="tour-welcome-target" class="text-xs font-bold text-violet-400 uppercase"
+                          data-i18n="new_content">New Content</span>
+
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="random-toggle" class="sr-only peer"
+                           onchange="toggleRandomMode(this)">
+                    <div
+                            class="w-9 h-5 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-violet-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-violet-500">
+                    </div>
+                    <span class="ml-2 text-xs font-medium text-slate-300" data-i18n="random_mode">Random Mode</span>
+                </label>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="creation-input"
+                       class="flex-grow bg-slate-800/80 rounded-xl border border-white/10 p-3 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
+                       data-i18n-placeholder="input_placeholder" placeholder="Ex: A detective in Paris...">
+
+                <div id="random-placeholder"
+                     class="hidden flex-grow bg-slate-800/80 rounded-xl border border-dashed border-violet-500/30 p-3 text-violet-300 italic text-center text-sm flex items-center justify-center animate-pulse"
+                     data-i18n="surprise_subject">
+                    🎲 Surprise Subject Activated
+                </div>
+
+                <button id="generate-btn" onclick="handleGenerate()"
+                        class="btn-primary px-6 py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2">
+                    <span id="gen-btn-text" data-i18n="create">Create</span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="resume-chat-container" class="hidden mb-6">
+            <button onclick="changeView('view-chat')"
+                    class="w-full p-4 rounded-2xl bg-slate-800/50 border border-violet-500/20 flex items-center justify-between hover:bg-slate-800 transition-colors">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl"><img src="assets/report.png" alt="chat" width="42" height="42"></span>
+                    <div class="text-left">
+                        <div class="font-bold text-white" data-i18n="chat_in_progress">Chat in progress</div>
+                        <div class="text-xs text-slate-400" data-i18n="click_resume">Click to resume</div>
+                    </div>
+                </div>
+                <span class="text-violet-400">→</span>
+            </button>
+        </div>
+
+        <h2 class="text-xl font-bold text-white mb-4 px-1 flex justify-between items-end">
+            <span data-i18n="my_library">My Library</span>
+            <span id="lang-badge"
+                  class="text-xs font-mono bg-violet-500/20 text-violet-300 px-2 py-1 rounded">EN</span>
+        </h2>
+
+        <ul id="book-list" class="space-y-3 pb-24"></ul>
+
+        <div id="loader"
+             class="hidden mt-8 text-center p-6 bg-slate-800/50 rounded-2xl border border-dashed border-slate-600">
+            <div
+                    class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-violet-500 border-t-transparent mb-3">
+            </div>
+            <p id="loader-text" class="text-violet-200 text-sm animate-pulse" data-i18n="loading_text">AI is writing and translating your story...</p>
+        </div>
+    </div>
+</div>
+
+<!-- CHAT VIEW -->
+<div id="view-chat" class="view-section relative bg-slate-900">
+    <div
+            class="sticky top-16 left-0 right-0 bg-[var(--bg)]/95 backdrop-blur z-30 w-full border-b border-white/5 px-4 py-3 flex justify-between items-center">
+        <button onclick="changeView('view-home')"
+                class="p-2 -ml-2 text-slate-400 hover:text-white rounded-lg flex items-center gap-1">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span class="text-sm font-medium" data-i18n="back">Back</span>
+        </button>
+        <div class="text-center">
+            <h1 id="chat-title" class="font-bold text-white text-sm">Chat</h1>
+            <span class="text-[10px] text-green-400 flex items-center justify-center gap-1"><span
+                    class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Online</span>
+        </div>
+        <button onclick="resetChat()" class="p-2 text-slate-400 hover:text-red-400 transition-colors"
+                title="New Chat">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="chat-container">
+        <div id="chat-messages" class="chat-messages"></div>
+
+        <div class="p-4 bg-[var(--bg)] border-t border-white/5">
+            <form onsubmit="sendChatMessage(event)" class="relative flex gap-2">
+                <input type="text" id="chat-input"
+                       class="flex-grow bg-slate-800 rounded-xl border border-white/10 p-3 pl-4 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 transition-colors"
+                       data-i18n-placeholder="chat_input_placeholder" placeholder="Type your message..."
+                       autocomplete="off">
+                <button type="submit" id="chat-send-btn"
+                        class="p-3 bg-violet-600 rounded-xl text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-violet-500 transition-colors shadow-lg">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- READER -->
+<div id="view-reader" class="view-section items-center relative bg-slate-900">
+    <div
+            class="sticky top-16 left-0 right-0 bg-[var(--bg)]/95 backdrop-blur z-30 w-full border-b border-white/5 px-4 py-2 flex justify-between items-center max-w-3xl">
+        <button onclick="changeView('view-home')" class="p-2 -ml-2 text-slate-400 hover:text-white rounded-lg">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <h1 id="reader-title" class="font-bold text-white truncate max-w-[200px] text-center">Title</h1>
+
+        <button id="translate-toggle-btn"
+                class="p-2 text-slate-400 hover:text-violet-400 transition-colors rounded-lg bg-slate-800/50 border border-white/10"
+                onclick="toggleFullTranslation()">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="w-full max-w-3xl p-5 pb-32 animate-slide-in-r">
+
+        <div id="reader-tips" class="text-center text-[10px] text-slate-500 mb-4 opacity-70"
+             data-i18n="reader_tips">
+            Click Word = Definition • Click Space/Sentence = Full Translation
+        </div>
+
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-xl mb-6 relative">
+            <div id="reader-content" class="text-slate-200"></div>
+        </div>
+
+        <div id="feedback-area" class="flex justify-center gap-4 mb-8">
+            <button onclick="rateBook('like')" id="btn-like"
+                    class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-emerald-500 hover:text-emerald-500 transition-all text-slate-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                    </path>
+                </svg>
+            </button>
+            <button onclick="rateBook('dislike')" id="btn-dislike"
+                    class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-red-500 hover:text-red-500 transition-all text-slate-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <div id="continue-area" class="flex flex-col items-center">
+            <button id="continue-btn" onclick="continueStory()"
+                    class="btn-primary px-8 py-3 rounded-xl font-bold text-white shadow-lg flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span data-i18n="continue_reading">Continue Reading</span>
+            </button>
+            <div id="continue-loader" class="hidden mt-4 flex gap-1">
+                <div class="w-2 h-2 bg-violet-400 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                <div class="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DONATE -->
+<div id="view-donate" class="view-section items-center justify-center p-4">
+    <div class="w-full max-w-md animate-fade-in relative">
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl pointer-events-none">
+        </div>
+        <div
+                class="absolute -bottom-20 -right-20 w-64 h-64 bg-violet-500/20 rounded-full blur-3xl pointer-events-none">
+        </div>
+
+        <div class="glass-panel p-8 rounded-3xl text-center relative z-10 border border-pink-500/20">
+            <div
+                    class="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-pink-500/20 mb-6 animate-float">
+                <img src="assets/hug.png" alt="hug" width="72" height="72">
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mb-2" data-i18n="support_title">Support LanGo</h2>
+            <div class="w-16 h-1 bg-pink-500 mx-auto rounded-full mb-6"></div>
+
+            <p class="text-slate-300 mb-8 leading-relaxed text-sm" data-i18n="support_text">
+                LanGo is free and developed with passion. If you learn new languages thanks to us, your support helps create new apps!
+            </p>
+
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"
+                  class="w-full relative group">
+                <input type="hidden" name="cmd" value="_s-xclick" />
+                <input type="hidden" name="hosted_button_id" value="BHQ75BSX95TN6" />
+
+                <button type="submit"
+                        class="w-full py-4 bg-[#FFC439] hover:bg-[#F4BB29] text-slate-900 font-bold rounded-xl transition-all transform active:scale-95 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#FFC439]/30 group-hover:-translate-y-1">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                                d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 0.867 4.498-1.307 6.235-4.34-8.769 8.034h-1.28c-.762 0-1.056.666-1.21 1.408l-.99 4.674c-.066.311-.342.913-.69.913z" />
+                    </svg>
+                    <span data-i18n="donate_button">Donate via PayPal</span>
+                </button>
+                <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
+            </form>
+
+            <button onclick="changeView('view-home')"
+                    class="mt-8 text-slate-500 hover:text-white text-sm transition-colors py-2" data-i18n="no_thanks">
+                No thanks, return home
+            </button>
+        </div>
+
+        <p class="text-center text-[10px] text-slate-600 mt-6" data-i18n="secure_msg">
+            Secure payment via PayPal. No donation required.
+        </p>
+    </div>
+</div>
+
+<!-- FEEDBACK -->
+<div id="view-feedback" class="view-section items-center justify-center p-4">
+    <div class="w-full max-w-md animate-fade-in">
+        <h2 class="text-2xl font-bold mb-6 text-white text-center" data-i18n="feedback_title">Your Feedback</h2>
+        <div class="glass-panel p-6 rounded-2xl">
+            <p class="text-slate-400 text-sm mb-6 text-center" data-i18n="feedback_desc">
+                Suggestion? Bug? Tell us everything!
+            </p>
+
+            <div id="feedback-status" class="hidden text-sm text-center p-3 rounded-lg"></div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="changeView('view-settings')"
+                        class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition"
+                        data-i18n="cancel">
+                    Cancel
+                </button>
+                <button type="submit" id="feedback-submit-btn"
+                        class="flex-grow btn-primary py-3 rounded-xl font-bold text-white shadow-lg flex justify-center items-center gap-2">
+                    <span data-i18n="send">Send</span>
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="view-settings" class="view-section items-center p-4">
+    <div class="w-full max-w-md mt-10 animate-fade-in">
+        <h2 class="text-2xl font-bold mb-6 text-white text-center" data-i18n="settings">Settings</h2>
+        <div class="glass-panel p-6 rounded-2xl space-y-6">
+
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase mb-2"
+                       data-i18n="interface_lang">Interface Language</label>
+                <select id="setting-interface-lang"
+                        class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white"
+                        onchange="updateInterfaceLanguage(this.value)"></select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-violet-400 uppercase mb-2" data-i18n="target_lang">Target Language</label>
+                <select id="setting-lang"
+                        class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white"
+                        onchange="updateSetting('targetLang', this.value)"></select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-pink-400 uppercase mb-2" data-i18n="level">Level</label>
+                <select id="setting-level"
+                        class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white"
+                        onchange="updateSetting('level', this.value)">
+                    <option value="beginner" data-i18n="lvl_beginner">Beginner (A1-A2)</option>
+                    <option value="intermediate" data-i18n="lvl_intermediate">Intermediate (B1-B2)</option>
+                    <option value="advanced" data-i18n="lvl_advanced">Advanced (C1-C2)</option>
+                </select>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 space-y-3">
+                <button onclick="changeView('view-donate')"
+                        class="w-full py-3 bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/30 rounded-xl font-medium transition flex items-center justify-center gap-2">
+                    <span data-i18n="support_project">💖 Support the project</span>
+                </button>
+
+                <button onclick="restartTutorial()"
+                        class="w-full py-3 bg-slate-700 hover:bg-violet-600 text-white rounded-xl font-medium transition flex items-center justify-center gap-2">
+                    <span data-i18n="restart_tutorial">🎓 Restart Tutorial</span>
+                </button>
+                <button id="settings-back-btn" onclick="changeView('view-home')"
+                        class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition"
+                        data-i18n="back">Back</button>
+            </div>
+            <div class="text-center text-[10px] text-slate-600">LanGo v4.0 • English First</div>
+        </div>
+    </div>
+</div>
+
+<!-- TUTORIAL LAYER -->
+<div id="guided-tour-layer">
+    <div id="tour-blocker-top" class="tour-blocker"></div>
+    <div id="tour-blocker-bottom" class="tour-blocker"></div>
+    <div id="tour-blocker-left" class="tour-blocker"></div>
+    <div id="tour-blocker-right" class="tour-blocker"></div>
+    <div id="tour-spotlight" class="tour-spotlight"></div>
+
+    <div id="tour-tooltip" class="tour-tooltip">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-2xl"><img src="assets/happy.png" alt="happy" width="40" height="40"></span>
+            <button id="tour-skip-btn" onclick="tour.stop()"
+                    class="text-xs text-slate-400 underline hover:text-white" data-i18n="skip">Skip</button>
+        </div>
+        <p id="tour-text" class="text-sm leading-relaxed mb-4 font-medium text-slate-200"></p>
+        <div class="flex justify-between items-center">
+            <span id="tour-step-count-display" class="text-xs text-slate-500"></span>
+            <button id="tour-next-btn"
+                    class="bg-violet-600 hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-3 py-1.5 rounded-lg text-xs font-bold transition"
+                    onclick="tour.next()">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- POPOVER -->
+<div id="popover"
+     class="fixed z-50 bg-slate-800 border border-violet-500/50 text-white p-4 rounded-xl shadow-2xl hidden w-full text-center transition-opacity duration-200 opacity-0 pointer-events-none"
+     style="max-width: calc(100vw - 20px); width: max-content;">
+    <div id="popover-content"></div>
+    <div id="popover-arrow"
+         class="absolute w-4 h-4 bg-slate-800 border-r border-b border-violet-500/50 rotate-45 transition-transform">
+    </div>
+</div>
+
+<script>
+    // --- CONSTANTS & CONFIG ---
+    const apiKey = (typeof AndroidBridge !== 'undefined')
+        ? AndroidBridge.getSecretKey()
+        : "";
+
+    // --- TRANSLATIONS DICTIONARY ---
+    const UI_TEXTS = {
+        en: {
+            app_title: "LanGo", profile: "Profile", next: "Next",
+            new_story: "New Story", new_content: "New Content",
+            story_mode: "Stories", chat_mode: "Chat", chat_in_progress: "Chat in progress", click_resume: "Click to resume",
+            random_mode: "Random Mode", input_placeholder: "Ex: A detective in London...",
+            chat_input_placeholder: "Type your message...", chat_intro_placeholder: "Ex: At the restaurant, Grocery shopping...",
+            surprise_subject: "🎲 Surprise Subject Activated", create: "Create", start_chat: "Chat",
+            my_library: "My Library", loading_text: "AI is writing and translating your story...",
+            reader_tips: "Click Word = Definition • Click Space/Sentence = Full Translation",
+            continue_reading: "Continue Reading", support_title: "Support LanGo",
+            support_text: "LanGo is free and developed with passion. If you learn new languages thanks to us, your support helps create new apps!",
+            donate_button: "Donate via PayPal", no_thanks: "No thanks, return home", secure_msg: "Secure payment via PayPal. No donation required.",
+            feedback_title: "Your Feedback", feedback_desc: "Suggestion? Bug? Tell us everything!",
+            your_email: "Your Email (Optional)", your_message: "Your Message", message_placeholder: "I'd like stories about...",
+            cancel: "Cancel", send: "Send", settings: "Settings", interface_lang: "Interface Language", target_lang: "Target Language",
+            level: "Level", lvl_beginner: "Beginner (A1-A2)", lvl_intermediate: "Intermediate (B1-B2)", lvl_advanced: "Advanced (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Support the project", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Give Feedback", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Restart Tutorial",
+            back: "Back", skip: "Skip",
+            tour_welcome: "Welcome! Create a custom story or toggle random mode.", tour_settings_btn: "Change your target language or level here.",
+            tour_select_lang: "Select a language, then click OK.", tour_settings_back: "Great! Now click Back to return home.",
+            tour_create: "To create a story, type a topic here OR toggle random mode.", tour_click_create: "Perfect! Click Create to start AI.",
+            tour_ready: "It's ready! Here is your story.", tour_word: "Tap a word to see its instant translation.",
+            tour_para: "Long press to translate the whole sentence.", tour_toggle: "Toggle here to show/hide full translation.",
+            ob_interface_lang: "App Language", ob_lang: "I want to learn...", ob_age: "My Age Group", ob_level: "My Current Level", ob_interest: "I like stories about...",
+            ob_interest_sub: "(Multiple choices)", ob_goal: "My Main Goal",
+            ob_child: "Child (-12)", ob_teen: "Teen (13-17)", ob_young: "Young Adult (18-25)", ob_adult: "Adult (26-60)", ob_senior: "Senior (60+)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Beginner", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermediate", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Advanced",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mystery", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> History", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Travel",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fun", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Work", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Travel"
+        },
+        fr: {
+            app_title: "LanGo", profile: "Profil", next: "Suivant",
+            new_story: "Nouvelle Histoire", new_content: "Nouveau Contenu",
+            story_mode: "Histoires", chat_mode: "Discussion", chat_in_progress: "Discussion en cours", click_resume: "Cliquez pour reprendre",
+            random_mode: "Mode Aléatoire", input_placeholder: "Ex: Un détective à Paris...",
+            chat_input_placeholder: "Écrivez votre message...", chat_intro_placeholder: "Ex: Au restaurant, Faire les courses...",
+            surprise_subject: "🎲 Sujet Surprise activé", create: "Créer", start_chat: "Discuter",
+            my_library: "Ma Bibliothèque", loading_text: "L'IA écrit et traduit votre histoire...",
+            reader_tips: "Clic Mot = Définition • Clic Espace/Phrase = Traduction complète",
+            continue_reading: "Lire la suite", support_title: "Soutenir LanGo",
+            support_text: "LanGo est gratuit et développé avec passion. Si vous apprenez de nouvelles langues grâce à nous, votre soutien nous aiderait à créer de nouveaux sites et applications !",
+            donate_button: "Faire un don PayPal ou Bancaire", no_thanks: "Non merci, retourner à l'accueil", secure_msg: "Paiement sécurisé géré par PayPal. Aucun don n'est obligatoire.",
+            feedback_title: "Votre avis compte", feedback_desc: "Une suggestion ? Un bug à signaler ? Dites-nous tout pour améliorer LanGo !",
+            your_email: "Votre Email (Optionnel)", your_message: "Votre Message", message_placeholder: "J'aimerais voir plus d'histoires sur...",
+            cancel: "Annuler", send: "Envoyer", settings: "Paramètres", interface_lang: "Langue de l'interface", target_lang: "Langue cible",
+            level: "Niveau", lvl_beginner: "Débutant (A1-A2)", lvl_intermediate: "Intermédiaire (B1-B2)", lvl_advanced: "Avancé (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Soutenir le projet", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Donner son avis", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Relancer le Tutoriel",
+            back: "Retour", skip: "Passer",
+            tour_welcome: "Bienvenue ! Créez une histoire personnalisée ou activez le switch aléatoire.",
+            tour_settings_btn: "Changez votre langue cible ou niveau ici.",
+            tour_select_lang: "Sélectionnez une langue, puis cliquez sur OK.",
+            tour_settings_back: "Super ! Maintenant, cliquez sur Retour pour revenir à l'accueil.",
+            tour_create: "Pour créer une histoire, écrivez un sujet ici OU activez le mode aléatoire.",
+            tour_click_create: "Parfait ! Cliquez sur Créer pour lancer l'IA.",
+            tour_ready: "C'est prêt ! Voici votre histoire.",
+            tour_word: "Touchez un mot pour voir sa traduction instantanée.",
+            tour_para: "Faites un appui long pour traduire la phrase entière.",
+            tour_toggle: "Basculez ici pour afficher/masquer la traduction complète.",
+            ob_interface_lang: "Langue de l'application", ob_lang: "Je veux apprendre...", ob_age: "Ma tranche d'âge", ob_level: "Mon niveau actuel",
+            ob_interest: "J'aime les histoires de...", ob_interest_sub: "(Plusieurs choix possibles)", ob_goal: "Mon objectif principal",
+            ob_child: "Enfant (-12 ans)", ob_teen: "Adolescent (13-17 ans)", ob_young: "Jeune Adulte (18-25 ans)",
+            ob_adult: "Adulte (26-60 ans)", ob_senior: "Senior (60+ ans)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Débutant (A1-A2)", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermédiaire (B1-B2)", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avancé (C1+)",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mystère", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Histoire", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Voyage",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Me divertir", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Le travail", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Voyager"
+        },
+        es: {
+            app_title: "LanGo", profile: "Perfil", next: "Siguiente",
+            new_story: "Nueva Historia", new_content: "Nuevo Contenido",
+            story_mode: "Historias", chat_mode: "Chat", chat_in_progress: "Chat en curso", click_resume: "Haz clic para reanudar",
+            random_mode: "Modo Aleatorio", input_placeholder: "Ej: Un detective en Madrid...",
+            chat_input_placeholder: "Escribe tu mensaje...", chat_intro_placeholder: "Ej: En el restaurante, Hacer la compra...",
+            surprise_subject: "🎲 Tema Sorpresa activado", create: "Crear", start_chat: "Chatear",
+            my_library: "Mi Biblioteca", loading_text: "La IA está escribiendo y traduciendo tu historia...",
+            reader_tips: "Clic Palabra = Definición • Clic Espacio/Frase = Traducción completa",
+            continue_reading: "Seguir leyendo", support_title: "Apoyar a LanGo",
+            support_text: "LanGo es gratuito y desarrollado con pasión. Si aprendes nuevos idiomas gracias a nosotros, ¡tu apoyo nos ayudará a crear nuevas aplicaciones!",
+            donate_button: "Donar vía PayPal", no_thanks: "No gracias, volver al inicio", secure_msg: "Pago seguro a través de PayPal. Ninguna donación es obligatoria.",
+            feedback_title: "Tu opinión importa", feedback_desc: "¿Una sugerencia? ¿Un error? ¡Cuéntanos todo para mejorar LanGo!",
+            your_email: "Tu correo (Opcional)", your_message: "Tu mensaje", message_placeholder: "Me gustaría ver historias sobre...",
+            cancel: "Cancelar", send: "Enviar", settings: "Ajustes", interface_lang: "Idioma de la interfaz", target_lang: "Idioma objetivo",
+            level: "Nivel", lvl_beginner: "Principiante (A1-A2)", lvl_intermediate: "Intermedio (B1-B2)", lvl_advanced: "Avanzado (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Apoyar el proyecto", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dar opinión", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reiniciar Tutorial",
+            back: "Atrás", skip: "Omitir",
+            tour_welcome: "¡Bienvenido! Crea una historia personalizada o activa el modo aleatorio.", tour_settings_btn: "Cambia tu idioma objetivo o nivel aquí.",
+            tour_select_lang: "Selecciona un idioma y haz clic en OK.", tour_settings_back: "¡Genial! Ahora haz clic en Atrás para volver al inicio.",
+            tour_create: "Para crear una historia, escribe un tema aquí O activa el modo aleatorio.", tour_click_create: "¡Perfecto! Haz clic en Crear para iniciar la IA.",
+            tour_ready: "¡Está listo! Aquí tienes tu historia.", tour_word: "Toca una palabra para ver su traducción instantánea.",
+            tour_para: "Mantén pulsado para traducir toda la frase.", tour_toggle: "Alterna aquí para mostrar/ocultar la traducción completa.",
+            ob_interface_lang: "Idioma de la aplicación", ob_lang: "Quiero aprender...", ob_age: "Mi grupo de edad", ob_level: "Mi nivel actual", ob_interest: "Me gustan las historias de...",
+            ob_interest_sub: "(Varias opciones)", ob_goal: "Mi objetivo principal",
+            ob_child: "Niño (-12 años)", ob_teen: "Adolescente (13-17 años)", ob_young: "Joven (18-25 años)", ob_adult: "Adulto (26-60 años)", ob_senior: "Mayor (60+ años)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Principiante", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermedio", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avanzado",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Misterio", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Ciencia Ficción", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasía", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Historia", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajes",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Divertirme", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Trabajo", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajar"
+        },
+        it: {
+            app_title: "LanGo", profile: "Profilo", next: "Avanti",
+            new_story: "Nuova Storia", new_content: "Nuovo Contenuto",
+            story_mode: "Storie", chat_mode: "Chat", chat_in_progress: "Chat in corso", click_resume: "Clicca per riprendere",
+            random_mode: "Modalità Casuale", input_placeholder: "Es: Un detective a Roma...",
+            chat_input_placeholder: "Scrivi il tuo messaggio...", chat_intro_placeholder: "Es: Al ristorante, Fare la spesa...",
+            surprise_subject: "🎲 Argomento Sorpresa attivato", create: "Crea", start_chat: "Chatta",
+            my_library: "La Mia Libreria", loading_text: "L'IA sta scrivendo e traducendo la tua storia...",
+            reader_tips: "Clic Parola = Definizione • Clic Spazio/Frase = Traduzione completa",
+            continue_reading: "Continua a leggere", support_title: "Sostieni LanGo",
+            support_text: "LanGo è gratuito e sviluppato con passione. Se impari nuove lingue grazie a noi, il tuo supporto ci aiuterà a creare nuove app!",
+            donate_button: "Dona tramite PayPal", no_thanks: "No grazie, torna alla home", secure_msg: "Pagamento sicuro tramite PayPal. Nessuna donazione è obbligatoria.",
+            feedback_title: "Il tuo parere conta", feedback_desc: "Un suggerimento? Un bug? Raccontaci tutto per migliorare LanGo!",
+            your_email: "La tua Email (Opzionale)", your_message: "Il tuo Messaggio", message_placeholder: "Vorrei vedere storie su...",
+            cancel: "Annulla", send: "Invia", settings: "Impostazioni", interface_lang: "Lingua dell'interfaccia", target_lang: "Lingua di destinazione",
+            level: "Livello", lvl_beginner: "Principiante (A1-A2)", lvl_intermediate: "Intermedio (B1-B2)", lvl_advanced: "Avanzato (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sostieni il progetto", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dai un feedback", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Riavvia il Tutorial",
+            back: "Indietro", skip: "Salta",
+            tour_welcome: "Benvenuto! Crea una storia personalizzata o attiva la modalità casuale.", tour_settings_btn: "Cambia qui la tua lingua di destinazione o il livello.",
+            tour_select_lang: "Seleziona una lingua, poi clicca su OK.", tour_settings_back: "Ottimo! Ora clicca su Indietro per tornare alla home.",
+            tour_create: "Per creare una storia, scrivi un argomento qui OPPURE attiva la modalità casuale.", tour_click_create: "Perfetto! Clicca su Crea per avviare l'IA.",
+            tour_ready: "È pronto! Ecco la tua storia.", tour_word: "Toca una parola per vedere la sua traduzione istantanea.",
+            tour_para: "Tieni premuto per tradurre l'intera frase.", tour_toggle: "Attiva qui per mostrare/nascondere la traduzione completa.",
+            ob_interface_lang: "Lingua dell'app", ob_lang: "Voglio imparare...", ob_age: "La mia fascia d'età", ob_level: "Il mio livello attuale", ob_interest: "Mi piacciono le storie di...",
+            ob_interest_sub: "(Scelte multiple)", ob_goal: "Il mio obiettivo principale",
+            ob_child: "Bambino (-12 anni)", ob_teen: "Adolescente (13-17 anni)", ob_young: "Giovane (18-25 anni)", ob_adult: "Adulto (26-60 anni)", ob_senior: "Anziano (60+ anni)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Principiante", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermedio", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avanzato",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mistero", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantascienza", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romantico", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Storia", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viaggi",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Divertirmi", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Lavoro", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viaggiare"
+        },
+        de: {
+            app_title: "LanGo", profile: "Profil", next: "Weiter",
+            new_story: "Neue Geschichte", new_content: "Neuer Inhalt",
+            story_mode: "Geschichten", chat_mode: "Chat", chat_in_progress: "Chat im Gange", click_resume: "Klicken zum Fortsetzen",
+            random_mode: "Zufallsmodus", input_placeholder: "Bsp: Ein Detektiv in Berlin...",
+            chat_input_placeholder: "Schreibe deine Nachricht...", chat_intro_placeholder: "Bsp: Im Restaurant, Einkaufen gehen...",
+            surprise_subject: "🎲 Überraschungsthema aktiviert", create: "Erstellen", start_chat: "Chatten",
+            my_library: "Meine Bibliothek", loading_text: "Die KI schreibt und übersetzt deine Geschichte...",
+            reader_tips: "Klick auf Wort = Definition • Klick auf Leerzeichen/Satz = Komplette Übersetzung",
+            continue_reading: "Weiterlesen", support_title: "LanGo unterstützen",
+            support_text: "LanGo ist kostenlos und mit Leidenschaft entwickelt. Wenn du dank uns neue Sprachen lernst, hilft uns deine Unterstützung, neue Apps zu entwickeln!",
+            donate_button: "Spenden via PayPal", no_thanks: "Nein danke, zurück zur Startseite", secure_msg: "Sichere Zahlung über PayPal. Keine Spende ist obligatorisch.",
+            feedback_title: "Dein Feedback", feedback_desc: "Ein Vorschlag? Ein Fehler? Sag uns alles, um LanGo zu verbessern!",
+            your_email: "Deine E-Mail (Optional)", your_message: "Deine Nachricht", message_placeholder: "Ich würde gerne Geschichten lesen über...",
+            cancel: "Abbrechen", send: "Senden", settings: "Einstellungen", interface_lang: "Spracheneinstellung", target_lang: "Zielsprache",
+            level: "Niveau", lvl_beginner: "Anfänger (A1-A2)", lvl_intermediate: "Mittelstufe (B1-B2)", lvl_advanced: "Fortgeschritten (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Projekt unterstützen", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Feedback geben", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Tutorial neu starten",
+            back: "Zurück", skip: "Überspringen",
+            tour_welcome: "Willkommen! Erstelle eine eigene Geschichte oder aktiviere den Zufallsmodus.", tour_settings_btn: "Ändere hier deine Zielsprache oder dein Niveau.",
+            tour_select_lang: "Wähle eine Sprache aus und klicke dann auf OK.", tour_settings_back: "Super! Klicke jetzt auf Zurück, um zur Startseite zu gelangen.",
+            tour_create: "Um eine Geschichte zu erstellen, tippe ein Thema hier ein ODER aktiviere den Zufallsmodus.", tour_click_create: "Perfekt! Klicke auf Erstellen, um die KI zu starten.",
+            tour_ready: "Es ist fertig! Hier ist deine Geschichte.", tour_word: "Tippe auf ein Wort für die sofortige Übersetzung.",
+            tour_para: "Lange drücken, um den ganzen Satz zu übersetzen.", tour_toggle: "Hier umschalten, um die gesamte Übersetzung ein-/auszublenden.",
+            ob_interface_lang: "App-Sprache", ob_lang: "Ich möchte lernen...", ob_age: "Meine Altersgruppe", ob_level: "Mein aktuelles Niveau", ob_interest: "Ich mag Geschichten über...",
+            ob_interest_sub: "(Mehrere Antworten möglich)", ob_goal: "Mein Hauptziel",
+            ob_child: "Kind (-12)", ob_teen: "Teenager (13-17)", ob_young: "Junger Erwachsener (18-25)", ob_adult: "Erwachsener (26-60)", ob_senior: "Senior (60+)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Anfänger", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mittelstufe", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fortgeschritten",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Krimi", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Sci-Fi", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasy", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romantik", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> Geschichte", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reisen",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Spaß", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Arbeit", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reisen"
+        },
+        pt: {
+            app_title: "LanGo", profile: "Perfil", next: "Próximo",
+            new_story: "Nova História", new_content: "Novo Conteúdo",
+            story_mode: "Histórias", chat_mode: "Chat", chat_in_progress: "Chat em andamento", click_resume: "Clique para continuar",
+            random_mode: "Modo Aleatório", input_placeholder: "Ex: Um detetive em Lisboa...",
+            chat_input_placeholder: "Escreva sua mensagem...", chat_intro_placeholder: "Ex: No restaurante, Fazer compras...",
+            surprise_subject: "🎲 Assunto Surpresa ativado", create: "Criar", start_chat: "Conversar",
+            my_library: "Minha Biblioteca", loading_text: "A IA está escrevendo e traduzindo sua história...",
+            reader_tips: "Clique na Palavra = Definição • Clique no Espaço/Frase = Tradução completa",
+            continue_reading: "Continuar Lendo", support_title: "Apoiar o LanGo",
+            support_text: "LanGo é gratuito e desenvolvido com paixão. Se você aprende novos idiomas graças a nós, seu apoio nos ajudará a criar novos aplicativos!",
+            donate_button: "Doar via PayPal", no_thanks: "Não, obrigado, voltar ao início", secure_msg: "Pagamento seguro através do PayPal. Nenhuma doação é obrigatória.",
+            feedback_title: "Sua opinião importa", feedback_desc: "Uma sugestão? Um erro? Conte-nos tudo para melhorar o LanGo!",
+            your_email: "Seu Email (Opcional)", your_message: "Sua Mensagem", message_placeholder: "Gostaria de ver histórias sobre...",
+            cancel: "Cancelar", send: "Enviar", settings: "Configurações", interface_lang: "Idioma da interface", target_lang: "Idioma alvo",
+            level: "Nível", lvl_beginner: "Iniciante (A1-A2)", lvl_intermediate: "Intermediário (B1-B2)", lvl_advanced: "Avançado (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Apoiar o projeto", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Dar feedback", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Reiniciar Tutorial",
+            back: "Voltar", skip: "Pular",
+            tour_welcome: "Bem-vindo! Crie uma história personalizada ou ative o modo aleatório.", tour_settings_btn: "Mude seu idioma alvo ou nível aqui.",
+            tour_select_lang: "Selecione um idioma e clique em OK.", tour_settings_back: "Ótimo! Agora clique em Voltar para retornar à tela inicial.",
+            tour_create: "Para criar uma história, digite um tópico aqui OU ative o modo aleatório.", tour_click_create: "Perfeito! Clique em Criar para iniciar a IA.",
+            tour_ready: "Está pronto! Aqui está sua história.", tour_word: "Toque em uma palavra para ver sua tradução instantânea.",
+            tour_para: "Pressione e segure para traduzir a frase inteira.", tour_toggle: "Alterne aqui para mostrar/ocultar a tradução completa.",
+            ob_interface_lang: "Idioma do aplicativo", ob_lang: "Eu quero aprender...", ob_age: "Minha faixa etária", ob_level: "Meu nível atual", ob_interest: "Gosto de histórias sobre...",
+            ob_interest_sub: "(Várias opções)", ob_goal: "Meu objetivo principal",
+            ob_child: "Criança (-12 anos)", ob_teen: "Adolescente (13-17 anos)", ob_young: "Jovem Adulto (18-25 anos)", ob_adult: "Adulto (26-60 anos)", ob_senior: "Sênior (60+ anos)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Iniciante", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Intermediário", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Avançado",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Mistério", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Ficção Científica", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Fantasia", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Romance", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> História", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viagem",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Diversão", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Trabalho", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Viajar"
+        },
+        jp: {
+            app_title: "LanGo", profile: "プロフィール", next: "次へ",
+            new_story: "新しいストーリー", new_content: "新しいコンテンツ",
+            story_mode: "ストーリー", chat_mode: "チャット", chat_in_progress: "チャット進行中", click_resume: "クリックして再開",
+            random_mode: "ランダムモード", input_placeholder: "例：東京の探偵...",
+            chat_input_placeholder: "メッセージを入力...", chat_intro_placeholder: "例：レストランで、買い物...",
+            surprise_subject: "🎲 サプライズテーマが有効になりました", create: "作成", start_chat: "チャット開始",
+            my_library: "マイライブラリ", loading_text: "AIがストーリーを作成・翻訳しています...",
+            reader_tips: "単語をクリック = 意味 • スペース/文をクリック = 全文翻訳",
+            continue_reading: "続きを読む", support_title: "LanGoを支援",
+            support_text: "LanGoは情熱を持って無料で開発されています。あなたが私たちのアプリで新しい言語を学んでいるなら、あなたの支援が新しいアプリを作る助けになります！",
+            donate_button: "PayPalで寄付", no_thanks: "結構です、ホームに戻ります", secure_msg: "PayPalによる安全な支払い。寄付は任意です。",
+            feedback_title: "フィードバック", feedback_desc: "提案やバグ報告ですか？ LanGoを改善するために何でも教えてください！",
+            your_email: "メールアドレス（任意）", your_message: "メッセージ", message_placeholder: "こんなストーリーが読みたい...",
+            cancel: "キャンセル", send: "送信", settings: "設定", interface_lang: "インターフェース言語", target_lang: "学習する言語",
+            level: "レベル", lvl_beginner: "初級 (A1-A2)", lvl_intermediate: "中級 (B1-B2)", lvl_advanced: "上級 (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> プロジェクトを支援", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> フィードバックを送る", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> チュートリアルをやり直す",
+            back: "戻る", skip: "スキップ",
+            tour_welcome: "ようこそ！オリジナルのストーリーを作成するか、ランダムモードをオンにしてください。", tour_settings_btn: "ここで学習言語とレベルを変更します。",
+            tour_select_lang: "言語を選択し、OKをクリックしてください。", tour_settings_back: "素晴らしい！戻るをクリックしてホームに戻りましょう。",
+            tour_create: "ストーリーを作成するには、ここにテーマを入力するかランダムモードをオンにします。", tour_click_create: "完璧です！作成をクリックしてAIを起動しましょう。",
+            tour_ready: "準備完了！あなたのストーリーです。", tour_word: "単語をタップすると即座に翻訳が表示されます。",
+            tour_para: "長押しすると文全体を翻訳します。", tour_toggle: "ここを切り替えて全文翻訳の表示/非表示を変更します。",
+            ob_interface_lang: "アプリの言語", ob_lang: "学びたい言語...", ob_age: "年齢層", ob_level: "現在のレベル", ob_interest: "好きなストーリーのジャンル...",
+            ob_interest_sub: "（複数選択可）", ob_goal: "主な目的",
+            ob_child: "子供（12歳以下）", ob_teen: "10代（13-17歳）", ob_young: "若者（18-25歳）", ob_adult: "大人（26-60歳）", ob_senior: "シニア（60歳以上）",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> 初級", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> 中級", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> 上級",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> ミステリー", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> SF", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> ファンタジー", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> 恋愛", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> 歴史", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> 旅行",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> 楽しむ", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> 仕事", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> 旅行する"
+        },
+        ar: {
+            app_title: "LanGo", profile: "الملف الشخصي", next: "التالي",
+            new_story: "قصة جديدة", new_content: "محتوى جديد",
+            story_mode: "القصص", chat_mode: "محادثة", chat_in_progress: "محادثة جارية", click_resume: "انقر للاستئناف",
+            random_mode: "الوضع العشوائي", input_placeholder: "مثال: محقق في القاهرة...",
+            chat_input_placeholder: "اكتب رسالتك...", chat_intro_placeholder: "مثال: في المطعم، التسوق...",
+            surprise_subject: "🎲 تم تفعيل الموضوع المفاجئ", create: "إنشاء", start_chat: "ابدأ المحادثة",
+            my_library: "مكتبتي", loading_text: "الذكاء الاصطناعي يكتب ويترجم قصتك...",
+            reader_tips: "انقر على الكلمة = تعريف • انقر على المسافة/الجملة = ترجمة كاملة",
+            continue_reading: "متابعة القراءة", support_title: "ادعم LanGo",
+            support_text: "تم تطوير LanGo بشغف وهو مجاني. إذا كنت تتعلم لغات جديدة بفضلنا، فإن دعمك سيساعدنا على إنشاء تطبيقات جديدة!",
+            donate_button: "تبرع عبر PayPal", no_thanks: "لا شكراً، العودة للرئيسية", secure_msg: "دفع آمن عبر PayPal. التبرع ليس إلزامياً.",
+            feedback_title: "رأيك يهمنا", feedback_desc: "اقتراح؟ خطأ؟ أخبرنا بكل شيء لتحسين LanGo!",
+            your_email: "بريدك الإلكتروني (اختياري)", your_message: "رسالتك", message_placeholder: "أود رؤية قصص حول...",
+            cancel: "إلغاء", send: "إرسال", settings: "الإعدادات", interface_lang: "لغة الواجهة", target_lang: "اللغة المستهدفة",
+            level: "المستوى", lvl_beginner: "مبتدئ (A1-A2)", lvl_intermediate: "متوسط (B1-B2)", lvl_advanced: "متقدم (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> ادعم المشروع", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> تقديم ملاحظات", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> إعادة تشغيل الدليل",
+            back: "رجوع", skip: "تخطي",
+            tour_welcome: "مرحباً! قم بإنشاء قصة مخصصة أو قم بتفعيل الوضع العشوائي.", tour_settings_btn: "قم بتغيير لغتك المستهدفة أو مستواك هنا.",
+            tour_select_lang: "حدد لغة، ثم انقر على موافق.", tour_settings_back: "رائع! الآن انقر على رجوع للعودة إلى الصفحة الرئيسية.",
+            tour_create: "لإنشاء قصة، اكتب موضوعاً هنا أو قم بتفعيل الوضع العشوائي.", tour_click_create: "ممتاز! انقر على إنشاء لبدء الذكاء الاصطناعي.",
+            tour_ready: "أصبحت جاهزة! إليك قصتك.", tour_word: "المس أي كلمة لرؤية ترجمتها الفورية.",
+            tour_para: "اضغط مطولاً لترجمة الجملة بأكملها.", tour_toggle: "قم بالتبديل هنا لإظهار/إخفاء الترجمة الكاملة.",
+            ob_interface_lang: "لغة التطبيق", ob_lang: "أريد أن أتعلم...", ob_age: "فئتي العمرية", ob_level: "مستواي الحالي", ob_interest: "أحب القصص عن...",
+            ob_interest_sub: "(خيارات متعددة)", ob_goal: "هدفي الرئيسي",
+            ob_child: "طفل (أقل من 12)", ob_teen: "مراهق (13-17)", ob_young: "شاب (18-25)", ob_adult: "بالغ (26-60)", ob_senior: "كبير في السن (60+)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> مبتدئ", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> متوسط", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> متقدم",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> غموض", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> خيال علمي", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> فنتازيا", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> رومانسية", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> تاريخ", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> سفر",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> للمتعة", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> للعمل", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> للسفر"
+        },
+        ru: {
+            app_title: "LanGo", profile: "Профиль", next: "Далее",
+            new_story: "Новая история", new_content: "Новый контент",
+            story_mode: "Истории", chat_mode: "Чат", chat_in_progress: "Чат активен", click_resume: "Нажмите, чтобы продолжить",
+            random_mode: "Случайный режим", input_placeholder: "Например: Детектив в Москве...",
+            chat_input_placeholder: "Введите ваше сообщение...", chat_intro_placeholder: "Например: В ресторане, Покупки...",
+            surprise_subject: "🎲 Случайная тема активирована", create: "Создать", start_chat: "Начать чат",
+            my_library: "Моя библиотека", loading_text: "ИИ пишет и переводит вашу историю...",
+            reader_tips: "Клик на слово = Перевод • Клик на пробел/предложение = Полный перевод",
+            continue_reading: "Продолжить чтение", support_title: "Поддержать LanGo",
+            support_text: "LanGo бесплатен и создан с душой. Если вы изучаете языки благодаря нам, ваша поддержка поможет в создании новых приложений!",
+            donate_button: "Пожертвовать через PayPal", no_thanks: "Нет, спасибо, на главную", secure_msg: "Безопасный платеж через PayPal. Пожертвования не обязательны.",
+            feedback_title: "Ваше мнение", feedback_desc: "Предложение? Ошибка? Расскажите нам всё, чтобы улучшить LanGo!",
+            your_email: "Ваш Email (необязательно)", your_message: "Ваше сообщение", message_placeholder: "Я бы хотел читать истории о...",
+            cancel: "Отмена", send: "Отправить", settings: "Настройки", interface_lang: "Язык интерфейса", target_lang: "Изучаемый язык",
+            level: "Уровень", lvl_beginner: "Начинающий (A1-A2)", lvl_intermediate: "Средний (B1-B2)", lvl_advanced: "Продвинутый (C1-C2)",
+            support_project: "<img src='assets/hug.png' width='42' height='42' style='display:inline;vertical-align:middle'> Поддержать проект", give_feedback: "<img src='assets/report.png' width='42' height='42' style='display:inline;vertical-align:middle'> Оставить отзыв", restart_tutorial: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Перезапустить обучение",
+            back: "Назад", skip: "Пропустить",
+            tour_welcome: "Добро пожаловать! Создайте свою историю или включите случайный режим.", tour_settings_btn: "Измените изучаемый язык или уровень здесь.",
+            tour_select_lang: "Выберите язык и нажмите ОК.", tour_settings_back: "Отлично! Теперь нажмите Назад, чтобы вернуться на главную.",
+            tour_create: "Чтобы создать историю, напишите тему здесь ИЛИ включите случайный режим.", tour_click_create: "Супер! Нажмите Создать для запуска ИИ.",
+            tour_ready: "Готово! Вот ваша история.", tour_word: "Нажмите на слово для быстрого перевода.",
+            tour_para: "Удерживайте нажатие, чтобы перевести всё предложение.", tour_toggle: "Нажмите здесь, чтобы показать/скрыть полный перевод.",
+            ob_interface_lang: "Язык приложения", ob_lang: "Я хочу изучать...", ob_age: "Моя возрастная группа", ob_level: "Мой уровень", ob_interest: "Мне нравятся истории о...",
+            ob_interest_sub: "(Можно выбрать несколько)", ob_goal: "Моя главная цель",
+            ob_child: "Ребенок (-12 лет)", ob_teen: "Подросток (13-17 лет)", ob_young: "Молодой (18-25 лет)", ob_adult: "Взрослый (26-60 лет)", ob_senior: "Пожилой (60+ лет)",
+            ob_lvl_beg: "<img src='assets/beginer.png' width='42' height='42' style='display:inline;vertical-align:middle'> Начинающий", ob_lvl_int: "<img src='assets/average.png' width='42' height='42' style='display:inline;vertical-align:middle'> Средний", ob_lvl_adv: "<img src='assets/tuto.png' width='42' height='42' style='display:inline;vertical-align:middle'> Продвинутый",
+            ob_mys: "<img src='assets/mistery.png' width='42' height='42' style='display:inline;vertical-align:middle'> Детектив", ob_sci: "<img src='assets/futurist.png' width='42' height='42' style='display:inline;vertical-align:middle'> Научная фантастика", ob_fan: "<img src='assets/fantasy.png' width='42' height='42' style='display:inline;vertical-align:middle'> Фэнтези", ob_rom: "<img src='assets/love.png' width='42' height='42' style='display:inline;vertical-align:middle'> Романтика", ob_his: "<img src='assets/history.png' width='42' height='42' style='display:inline;vertical-align:middle'> История", ob_tra: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Путешествия",
+            ob_fun: "<img src='assets/idk.png' width='42' height='42' style='display:inline;vertical-align:middle'> Развлечение", ob_work: "<img src='assets/work.png' width='42' height='42' style='display:inline;vertical-align:middle'> Работа", ob_trav: "<img src='assets/travel.png' width='42' height='42' style='display:inline;vertical-align:middle'> Путешествия"
+        }
+    };
+
+    const LANGS = {
+        'en': '🇬🇧 English', 'es': '🇪🇸 Español', 'de': '🇩🇪 Deutsch',
+        'it': '🇮🇹 Italiano', 'fr': '🇫🇷 Français', 'pt': '🇵🇹 Português',
+        'jp': '🇯🇵 日本語', 'ar': '🇸🇦 العربية', 'ru': '🇷🇺 Русский'
+    };
+
+    // Translation helper
+    function t(key) {
+        const lang = state.interfaceLang || 'en';
+        const dict = UI_TEXTS[lang] || UI_TEXTS['en'];
+        return dict[key] || UI_TEXTS['en'][key] || key;
+    }
+
+    function updateInterface() {
+        const lang = state.interfaceLang || 'en';
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+        document.body.className = `lang-${lang}`;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            el.innerHTML = t(el.getAttribute('data-i18n'));
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+        });
+
+        renderLibrary(); 
+
+        if (state.activeChat && state.activeChat.messages.length > 0) {
+            document.getElementById('resume-chat-container').classList.remove('hidden');
+        } else {
+            document.getElementById('resume-chat-container').classList.add('hidden');
+        }
+    }
+
+    const ONBOARDING_CONFIG = [
+        {
+            id: 'interfaceLang', title: "ob_interface_lang", type: 'grid', opts: [
+                { v: 'en', l: '🇬🇧 English' }, { v: 'es', l: '🇪🇸 Español' }, { v: 'de', l: '🇩🇪 Deutsch' }, { v: 'it', l: '🇮🇹 Italiano' },
+                { v: 'fr', l: '🇫🇷 Français' }, { v: 'jp', l: '🇯🇵 日本語' }, { v: 'ar', l: '🇸🇦 العربية' }, { v: 'ru', l: '🇷🇺 Русский' }
+            ]
+        },
+        {
+            id: 'targetLang', title: "ob_lang", type: 'grid', opts: [
+                { v: 'en', l: '🇬🇧 English' }, { v: 'es', l: '🇪🇸 Español' }, { v: 'de', l: '🇩🇪 Deutsch' }, { v: 'it', l: '🇮🇹 Italiano' },
+                { v: 'fr', l: '🇫🇷 Français' }, { v: 'jp', l: '🇯🇵 日本語' }, { v: 'ar', l: '🇸🇦 العربية' }, { v: 'ru', l: '🇷🇺 Русский' }
+            ]
+        },
+        {
+            id: 'age', title: "ob_age", type: 'list', opts: [
+                { v: 'child', l: 'ob_child' }, { v: 'teen', l: 'ob_teen' }, { v: 'young_adult', l: 'ob_young' }, { v: 'adult', l: 'ob_adult' }, { v: 'senior', l: 'ob_senior' }
+            ]
+        },
+        {
+            id: 'level', title: "ob_level", type: 'list', opts: [
+                { v: 'beginner', l: 'ob_lvl_beg' }, { v: 'intermediate', l: 'ob_lvl_int' }, { v: 'advanced', l: 'ob_lvl_adv' }
+            ]
+        },
+        {
+            id: 'interest', title: "ob_interest", subtitle: "ob_interest_sub", type: 'grid', multi: true, opts: [
+                { v: 'mystery', l: 'ob_mys' }, { v: 'scifi', l: 'ob_sci' }, { v: 'fantasy', l: 'ob_fan' },
+                { v: 'romance', l: 'ob_rom' }, { v: 'history', l: 'ob_his' }, { v: 'travel', l: 'ob_tra' }
+            ]
+        },
+        {
+            id: 'goal', title: "ob_goal", type: 'list', opts: [
+                { v: 'fun', l: 'ob_fun' }, { v: 'work', l: 'ob_work' }, { v: 'travel', l: 'ob_trav' }
+            ]
+        }
+    ];
+
+    let state = {
+        targetLang: 'es', // Now default target is different just in case, logic handles it. 
+        interfaceLang: 'en',
+        level: 'beginner',
+        books: [],
+        currentBookId: null,
+        userProfile: {},
+        onboardingDone: false,
+        tutorialDone: false,
+        currentOnboardingStep: 0,
+        lastGenerationTime: 0,
+        creationMode: 'story',
+        activeChat: null 
+    };
+
+    let db;
+
+    // --- DATABASE (IndexedDB) ---
+    const initDB = () => new Promise(resolve => {
+        const r = indexedDB.open('LanGo_DB_v9', 3);
+        r.onupgradeneeded = e => {
+            const d = e.target.result;
+            if (!d.objectStoreNames.contains('books')) d.createObjectStore('books', { keyPath: 'id' });
+            if (!d.objectStoreNames.contains('settings')) d.createObjectStore('settings', { keyPath: 'key' });
+        };
+        r.onsuccess = e => { db = e.target.result; resolve(); };
+        r.onerror = () => resolve();
+    });
+
+    const saveSet = (k, v) => db?.transaction('settings', 'readwrite').objectStore('settings').put({ key: k, value: v });
+    const loadSet = () => new Promise(r => {
+        if (!db) return r({});
+        const q = db.transaction('settings', 'readonly').objectStore('settings').getAll();
+        q.onsuccess = () => { const res = {}; q.result.forEach(i => res[i.key] = i.value); r(res); };
+        q.onerror = () => r({});
+    });
+    const saveBook = b => db?.transaction('books', 'readwrite').objectStore('books').put(b);
+    const deleteBookDB = id => db?.transaction('books', 'readwrite').objectStore('books').delete(id);
+    const loadBooks = () => new Promise(r => {
+        if (!db) return r([]);
+        const q = db.transaction('books', 'readonly').objectStore('books').getAll();
+        q.onsuccess = () => r(q.result.sort((a, b) => new Date(b.created) - new Date(a.created)));
+        q.onerror = () => r([]);
+    });
+
+    // --- API GEMINI ---
+    async function callAI(prompt, systemPrompt) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        const payload = {
+            contents: [{ parts: [{ text: prompt }] }],
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            generationConfig: { responseMimeType: "application/json" }
+        };
+
+        for (let i = 0; i < 5; i++) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (response.status === 503 || response.status === 429) {
+                        throw new Error(`Erreur ${response.status}_Surcharge`);
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.candidates || !data.candidates[0].content) {
+                    throw new Error("Réponse vide de l'IA");
+                }
+
+                let text = data.candidates[0].content.parts[0].text;
+
+                if (text.startsWith('```json')) {
+                    text = text.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+                } else if (text.startsWith('```')) {
+                    text = text.replace(/^```\s*/, '').replace(/\s*```$/, '');
+                }
+
+                try {
+                    return JSON.parse(text);
+                } catch (jsonError) {
+                    console.warn("JSON Parse Error, returning raw text as content", text);
+                    return { content: text };
+                }
+
+            } catch (error) {
+                console.warn(`Tentative ${i + 1} échouée:`, error.message);
+                if (i === 4) {
+                    alert("Le serveur est très sollicité actuellement. Veuillez réessayer dans un instant.");
+                    throw new Error(`Échec de l'appel API après 5 tentatives.`);
+                }
+                await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+            }
+        }
+    }
+
+    // --- TUTORIAL ENGINE ---
+    const tour = {
+        active: false, stepIndex: 0, _boundUpdate: null,
+        steps: [
+            { id: 'tour-welcome-target', textKey: "tour_welcome", pos: 'bottom' },
+            { id: 'settings-btn', textKey: "tour_settings_btn", pos: 'bottom', trigger: 'click' },
+            { id: 'setting-lang', textKey: "tour_select_lang", pos: 'bottom' },
+            { id: 'settings-back-btn', textKey: "tour_settings_back", pos: 'top', trigger: 'click' },
+            { id: 'creation-container', textKey: "tour_create", pos: 'bottom', trigger: 'manual_validation' },
+            { id: 'generate-btn', textKey: "tour_click_create", pos: 'top', trigger: 'action_required' },
+            { id: 'reader-title', textKey: "tour_ready", pos: 'bottom' },
+            { id: 'first-word', textKey: "tour_word", pos: 'bottom', trigger: 'tap' },
+            { id: 'first-para', textKey: "tour_para", pos: 'top', trigger: 'hold' },
+            { id: 'translate-toggle-btn', textKey: "tour_toggle", pos: 'bottom' }
+        ],
+        start: function (force = false) {
+            if (this.active) return;
+            if (!force && state.tutorialDone) return;
+            if (!document.getElementById('view-home').classList.contains('active')) {
+                changeView('view-home'); setTimeout(() => this.start(force), 300); return;
+            }
+            this.active = true; this.stepIndex = 0;
+            document.getElementById('guided-tour-layer').classList.add('active');
+            const skipBtn = document.getElementById('tour-skip-btn');
+            if (skipBtn) skipBtn.style.display = force ? 'inline' : 'none';
+            this._boundUpdate = () => requestAnimationFrame(() => this.updatePosition());
+            window.addEventListener('scroll', this._boundUpdate, { passive: true, capture: true });
+            window.addEventListener('resize', this._boundUpdate, { passive: true });
+            this.show();
+        },
+        updatePosition: function () {
+            if (!this.active) return;
+            const step = this.steps[this.stepIndex];
+            if (!step) return;
+            let el = document.getElementById(step.id);
+            if (step.id === 'first-word') el = document.querySelector('.word-interactive');
+            if (step.id === 'first-para') el = document.querySelector('#reader-content p');
+            if (!el) return;
+            const spot = document.getElementById('tour-spotlight');
+            const tip = document.getElementById('tour-tooltip');
+            const rect = el.getBoundingClientRect();
+            const topB = document.getElementById('tour-blocker-top');
+            const botB = document.getElementById('tour-blocker-bottom');
+            const leftB = document.getElementById('tour-blocker-left');
+            const rightB = document.getElementById('tour-blocker-right');
+            const winW = document.documentElement.clientWidth;
+            const winH = document.documentElement.clientHeight;
+            topB.style.top = '0px'; topB.style.left = '0px'; topB.style.width = '100%'; topB.style.height = Math.max(0, rect.top - 5) + 'px';
+            botB.style.top = (rect.bottom + 5) + 'px'; botB.style.left = '0px'; botB.style.width = '100%'; botB.style.height = Math.max(0, winH - (rect.bottom + 5)) + 'px';
+            leftB.style.top = Math.max(0, rect.top - 5) + 'px'; leftB.style.left = '0px'; leftB.style.width = Math.max(0, rect.left - 5) + 'px'; leftB.style.height = (rect.height + 10) + 'px';
+            rightB.style.top = Math.max(0, rect.top - 5) + 'px'; rightB.style.left = (rect.right + 5) + 'px'; rightB.style.width = Math.max(0, winW - (rect.right + 5)) + 'px'; rightB.style.height = (rect.height + 10) + 'px';
+            spot.style.top = (rect.top - 5) + 'px'; spot.style.left = (rect.left - 5) + 'px'; spot.style.width = (rect.width + 10) + 'px'; spot.style.height = (rect.height + 10) + 'px';
+            const tipHeight = tip.offsetHeight; const tipWidth = tip.offsetWidth;
+            let leftPos = rect.left + (rect.width / 2) - (tipWidth / 2);
+            if (leftPos < 10) leftPos = 10; if (leftPos + tipWidth > window.innerWidth - 10) leftPos = window.innerWidth - tipWidth - 10;
+            tip.style.left = leftPos + 'px';
+            const spaceBelow = window.innerHeight - rect.bottom; const spaceAbove = rect.top; const margin = 20;
+            let topPos;
+            if (step.pos === 'bottom' && spaceBelow > tipHeight + margin) topPos = rect.bottom + margin;
+            else if (step.pos === 'top' && spaceAbove > tipHeight + margin) topPos = rect.top - tipHeight - margin;
+            else if (spaceBelow > tipHeight + margin) topPos = rect.bottom + margin;
+            else if (spaceAbove > tipHeight + margin) topPos = rect.top - tipHeight - margin;
+            else topPos = (window.innerHeight / 2 - tipHeight / 2);
+            if (topPos < 10) topPos = 10;
+            tip.style.top = topPos + 'px';
+        },
+        show: function () {
+            if (!this.active) return;
+            if (this.stepIndex >= this.steps.length) { this.stop(); return; }
+            const step = this.steps[this.stepIndex];
+            let el = document.getElementById(step.id);
+            if (step.id === 'first-word') el = document.querySelector('.word-interactive');
+            if (step.id === 'first-para') el = document.querySelector('#reader-content p');
+            if (!el) { if (step.id === 'reader-title') { return; } this.stepIndex++; this.show(); return; }
+            document.getElementById('tour-text').textContent = t(step.textKey);
+            document.getElementById('tour-step-count-display').textContent = `${this.stepIndex + 1}/${this.steps.length}`;
+            const btn = document.getElementById('tour-next-btn');
+            if (step.trigger === 'manual_validation') {
+                const input = document.getElementById('creation-input');
+                const isRandom = document.getElementById('random-toggle').checked;
+                const hasText = input.value.trim().length > 0;
+                if (isRandom || hasText) { btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); btn.textContent = "OK"; }
+                else { btn.textContent = "À vous..."; btn.classList.add('opacity-50', 'cursor-not-allowed'); btn.disabled = true; }
+            } else if (step.trigger && step.trigger !== 'wait') {
+                btn.textContent = "À vous..."; btn.classList.add('opacity-50', 'cursor-not-allowed'); btn.disabled = true;
+            } else {
+                btn.textContent = "OK"; btn.classList.remove('opacity-50', 'cursor-not-allowed'); btn.disabled = false;
+            }
+            this.updatePosition();
+        },
+        next: function () {
+            if (!this.active) return; this.stepIndex++;
+            if (this.stepIndex >= this.steps.length) this.stop(); else this.show();
+        },
+        action: function (type) { if (!this.active) return; const step = this.steps[this.stepIndex]; if (step && step.trigger === type) this.next(); },
+        stop: function () {
+            this.active = false; document.getElementById('guided-tour-layer').classList.remove('active');
+            state.tutorialDone = true; saveSet('tutorialDone', true);
+            if (this._boundUpdate) { window.removeEventListener('scroll', this._boundUpdate, { capture: true }); window.removeEventListener('resize', this._boundUpdate); this._boundUpdate = null; }
+        }
+    };
+
+    function restartTutorial() { changeView('view-home'); state.tutorialDone = false; saveSet('tutorialDone', false); setTimeout(() => tour.start(true), 500); }
+
+    // --- APP LOGIC ---
+
+    function setCreationMode(mode) {
+        if (mode === 'chat' && tour.active) {
+            const btn = document.getElementById('mode-chat');
+            showPopover(btn, "Finish the tutorial first!");
+            setTimeout(hidePopover, 2000);
+            return;
+        }
+
+        state.creationMode = mode;
+        document.querySelectorAll('.mode-option').forEach(el => el.classList.remove('active'));
+        document.getElementById(`mode-${mode}`).classList.add('active');
+
+        const btnText = document.getElementById('gen-btn-text');
+        const input = document.getElementById('creation-input');
+
+        if (mode === 'chat') {
+            btnText.textContent = t('start_chat');
+            input.setAttribute('data-i18n-placeholder', 'chat_intro_placeholder');
+            input.placeholder = t('chat_intro_placeholder');
+        } else {
+            btnText.textContent = t('create');
+            input.setAttribute('data-i18n-placeholder', 'input_placeholder');
+            input.placeholder = t('input_placeholder');
+        }
+    }
+
+    document.getElementById('creation-input').addEventListener('input', function (e) {
+        document.getElementById('creation-container').classList.remove('animate-shake');
+        if (tour.active) {
+            const step = tour.steps[tour.stepIndex];
+            if (step.id === 'creation-container' && step.trigger === 'manual_validation') {
+                const btn = document.getElementById('tour-next-btn');
+                if (this.value.trim().length > 0) {
+                    btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); btn.textContent = "OK";
+                } else {
+                    btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed'); btn.textContent = "À vous...";
+                }
+            }
+        }
+    });
+
+    function changeView(viewId) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo(0, 0);
+
+        if (viewId === 'view-home') {
+            updateInterface(); 
+            if (tour.active && tour.steps[tour.stepIndex].id === 'settings-back-btn') tour.next();
+        } else if (viewId === 'view-settings') {
+            if (tour.active && tour.steps[tour.stepIndex].id === 'settings-btn') tour.next();
+        } else if (viewId === 'view-chat') {
+            renderChat();
+        }
+    }
+
+    // --- ONBOARDING ---
+    function renderOnboarding() {
+        const step = ONBOARDING_CONFIG[state.currentOnboardingStep];
+        const div = document.getElementById('onboarding-container');
+        const percent = ((state.currentOnboardingStep + 1) / ONBOARDING_CONFIG.length) * 100;
+        document.getElementById('onboarding-progress').style.width = percent + '%';
+        document.getElementById('onboarding-step-count').textContent = `${state.currentOnboardingStep + 1}/${ONBOARDING_CONFIG.length}`;
+        document.getElementById('onboarding-back-btn').disabled = state.currentOnboardingStep === 0;
+
+        const currentVal = state.userProfile[step.id];
+        const isValid = Array.isArray(currentVal) ? currentVal.length > 0 : !!currentVal;
+        document.getElementById('onboarding-next-btn').disabled = !isValid;
+
+        let html = `<div class="anim-item-enter" style="animation-delay: 0ms">`;
+        html += `<h2 class="text-2xl font-bold text-white text-center mb-1" data-i18n="${step.title}">${t(step.title)}</h2>`;
+        if (step.subtitle) html += `<p class="text-center text-slate-400 text-xs mb-6" data-i18n="${step.subtitle}">${t(step.subtitle)}</p>`;
+        else html += `<div class="mb-6"></div>`;
+        html += `</div>`;
+        html += `<div class="${step.type === 'grid' ? 'qcm-grid' : 'space-y-3'}">`;
+        step.opts.forEach((o, index) => {
+            const val = state.userProfile[step.id];
+            const isSel = Array.isArray(val) ? val.includes(o.v) : val === o.v;
+            const isMulti = step.multi ? 'multi-selected' : '';
+            const delay = 100 + (index * 50);
+            
+            const isRaw = (step.id === 'targetLang' || step.id === 'interfaceLang');
+            const labelContent = isRaw ? o.l : t(o.l);
+            const dataAttr = isRaw ? '' : `data-i18n="${o.l}"`;
+
+            html += `<div class="qcm-option ${isSel ? 'selected ' + isMulti : ''} anim-item-enter" style="animation-delay: ${delay}ms" onclick="selectOb('${step.id}', '${o.v}', this)">
+                <span ${dataAttr}>${labelContent}</span>
+            </div>`;
+        });
+        html += `</div>`;
+        div.classList.remove('anim-exit');
+        div.innerHTML = html;
+    }
+
+    function handleStepTransition(direction) {
+        const container = document.getElementById('onboarding-container');
+        container.classList.add('anim-exit');
+        setTimeout(() => {
+            if (direction === 'next') state.currentOnboardingStep++; else state.currentOnboardingStep--;
+            renderOnboarding();
+        }, 200);
+    }
+
+    window.selectOb = (k, v, el) => {
+        const step = ONBOARDING_CONFIG.find(s => s.id === k);
+        if (step.multi) {
+            if (!Array.isArray(state.userProfile[k])) state.userProfile[k] = [];
+            const index = state.userProfile[k].indexOf(v);
+            if (index > -1) { state.userProfile[k].splice(index, 1); el.classList.remove('selected', 'multi-selected'); }
+            else { state.userProfile[k].push(v); el.classList.add('selected', 'multi-selected'); }
+            document.getElementById('onboarding-next-btn').disabled = state.userProfile[k].length === 0;
+        } else {
+            state.userProfile[k] = v;
+            el.parentElement.querySelectorAll('.qcm-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('onboarding-next-btn').disabled = false;
+
+            if (k === 'interfaceLang') {
+                state.interfaceLang = v;
+                saveSet('interfaceLang', v);
+                updateInterface(); // Instantly update UI texts
+            }
+        }
+        el.style.transform = "scale(0.95)"; setTimeout(() => el.style.transform = "", 150);
+    };
+
+    window.nextOnboardingStep = () => { if (state.currentOnboardingStep < ONBOARDING_CONFIG.length - 1) handleStepTransition('next'); else finishOnboarding(); };
+    window.prevOnboardingStep = () => { if (state.currentOnboardingStep > 0) handleStepTransition('prev'); };
+
+    function finishOnboarding() {
+        state.targetLang = state.userProfile.targetLang;
+        state.level = state.userProfile.level;
+        state.onboardingDone = true;
+        saveSet('userProfile', state.userProfile);
+        saveSet('targetLang', state.targetLang);
+        saveSet('level', state.level);
+        saveSet('onboardingDone', true);
+        changeView('view-home');
+        updateInterface();
+        setTimeout(() => tour.start(), 1000);
+    }
+
+    // --- HOME & GENERATION ---
+    function toggleRandomMode(cb) {
+        const input = document.getElementById('creation-input');
+        const ph = document.getElementById('random-placeholder');
+        if (cb.checked) {
+            input.classList.add('hidden'); ph.classList.remove('hidden');
+            if (tour.active && tour.steps[tour.stepIndex].id === 'creation-container') tour.next();
+        }
+        else { input.classList.remove('hidden'); ph.classList.add('hidden'); input.focus(); }
+    }
+
+    let cooldownInterval = null;
+    function startCooldownButton() {
+        const btn = document.getElementById('generate-btn');
+        if (!btn) return;
+        if (cooldownInterval) clearInterval(cooldownInterval);
+        const update = () => {
+            const now = Date.now();
+            const diff = now - (state.lastGenerationTime || 0);
+            const duration = 60000;
+            if (state.lastGenerationTime && diff < duration) {
+                const secondsLeft = Math.ceil((duration - diff) / 1000);
+                btn.disabled = true;
+                btn.innerHTML = `<span>⏳ ${secondsLeft}s</span>`;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = false;
+                const actionText = state.creationMode === 'chat' ? t('start_chat') : t('create');
+                btn.innerHTML = `<span>${actionText}</span> <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                if (cooldownInterval) clearInterval(cooldownInterval);
+            }
+        };
+        update();
+        cooldownInterval = setInterval(update, 1000);
+    }
+
+    async function handleGenerate() {
+        let shouldSkipGenerateStep = false;
+        if (tour.active) {
+            const currentStep = tour.steps[tour.stepIndex];
+            if (currentStep.id === 'creation-container' || currentStep.id === 'generate-btn') { shouldSkipGenerateStep = true; }
+            document.getElementById('guided-tour-layer').classList.remove('active');
+        }
+
+        const input = document.getElementById('creation-input');
+        const isRandom = document.getElementById('random-toggle').checked;
+        let topic = input.value.trim();
+
+        if (!topic && !isRandom) {
+            const container = document.getElementById('creation-container');
+            container.classList.add('animate-shake');
+            setTimeout(() => container.classList.remove('animate-shake'), 400);
+            const msg = t('tour_create');
+            showPopover(document.getElementById('creation-input'), msg);
+            setTimeout(hidePopover, 4000);
+            if (tour.active) document.getElementById('guided-tour-layer').classList.add('active');
+            return;
+        }
+
+        const now = Date.now();
+        if (state.lastGenerationTime && (now - state.lastGenerationTime < 60000)) {
+            const remaining = Math.ceil((60000 - (now - state.lastGenerationTime)) / 1000);
+            const btn = document.getElementById('generate-btn');
+            const container = document.getElementById('creation-container');
+            container.classList.add('animate-shake');
+            setTimeout(() => container.classList.remove('animate-shake'), 400);
+            showPopover(btn, `⏳ Wait ${remaining}s`);
+            setTimeout(hidePopover, 3000);
+            if (tour.active) document.getElementById('guided-tour-layer').classList.add('active');
+            return;
+        }
+
+        if (state.creationMode === 'chat') {
+            startChat(isRandom ? null : topic);
+            return;
+        }
+
+        document.getElementById('generate-btn').disabled = true;
+        document.getElementById('loader').classList.remove('hidden');
+
+        state.lastGenerationTime = now;
+        saveSet('lastGenerationTime', now);
+
+        const profile = state.userProfile;
+        const interests = Array.isArray(profile.interest) ? profile.interest.join(", ") : (profile.interest || "general");
+        const ageGroup = profile.age || "adult";
+        const interestContext = `User loves these genres: ${interests}.`;
+        const ageContext = `Target Audience Age Group: ${ageGroup}.`;
+        const targetLanguageName = LANGS[state.targetLang];
+
+        const sysPrompt = `You are a bilingual story generator. Target Language: ${targetLanguageName}. Level: ${state.level}.
+        ${interestContext} ${ageContext}
+        CRITICAL INSTRUCTIONS:
+        1. The "title" MUST be in ${targetLanguageName}.
+        2. Adapt the tone, complexity, and themes to fit the age group: ${ageGroup}.
+        3. Output STRICT JSON with this schema:
+        { "title": "Title in ${targetLanguageName}", "paragraphs": [ { "sentences": [ { "text": "A single sentence in ${targetLanguageName}.", "translation": "The English translation of that single sentence." } ], "glossary": { "word": "english_translation", "another": "translation" } } ] }
+        4. The 'glossary' object MUST contain an English translation for EVERY SINGLE WORD in the 'sentences' texts.
+        5. Glossary keys MUST be lowercase, stripped of punctuation.`;
+
+        const userPrompt = isRandom ? "Generate a creative, engaging short story (3 or 4 paragraphs). Surprise me." : `Write a story (3 or 4 paragraphs) about: "${topic}".`;
+
+        try {
+            const data = await callAI(userPrompt, sysPrompt);
+            if (!data.title || !data.paragraphs) throw new Error("Format de réponse invalide.");
+
+            const newBook = {
+                id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+                title: data.title,
+                paragraphs: data.paragraphs,
+                lang: state.targetLang,
+                desc: isRandom ? "🎲 " + t('random_mode') : topic,
+                created: new Date().toISOString(),
+                rating: null
+            };
+            await saveBook(newBook);
+            state.books.unshift(newBook);
+            input.value = "";
+            openReader(newBook);
+
+            if (tour.active) {
+                document.getElementById('guided-tour-layer').classList.add('active');
+                if (shouldSkipGenerateStep) {
+                    const readerStepIdx = tour.steps.findIndex(s => s.id === 'reader-title');
+                    if (readerStepIdx !== -1) { tour.stepIndex = readerStepIdx; tour.show(); } else { tour.next(); }
+                } else { tour.next(); }
+            }
+
+        } catch (e) {
+            console.error(e);
+            showPopover(document.getElementById('generate-btn'), "Error. Try again.");
+            setTimeout(hidePopover, 3000);
+            if (tour.active) document.getElementById('guided-tour-layer').classList.add('active');
+        } finally {
+            document.getElementById('loader').classList.add('hidden');
+            startCooldownButton();
+        }
+    }
+
+    // --- CHAT LOGIC ---
+    function startChat(topic) {
+        state.activeChat = {
+            messages: [],
+            topic: topic || 'Random Situation',
+            isRandom: !topic
+        };
+        saveSet('activeChat', state.activeChat);
+        changeView('view-chat');
+        document.getElementById('chat-title').textContent = topic ? topic : t('random_mode');
+        sendChatToAI(true);
+    }
+
+    function resetChat() {
+        if (confirm("Start a new chat? The current one will be lost.")) {
+            changeView('view-home');
+        }
+    }
+
+    function renderChat() {
+        const container = document.getElementById('chat-messages');
+        if (!state.activeChat) return;
+
+        const currentLang = state.targetLang;
+
+        container.innerHTML = state.activeChat.messages.map((m, idx) => {
+            let contentHTML = m.text;
+
+            if (m.role === 'ai') {
+                if (m.data) {
+                    let wordsHTML = '';
+                    if (currentLang === 'jp') {
+                        let segments = [];
+                        if (window.Intl && Intl.Segmenter) {
+                            const segmenter = new Intl.Segmenter('ja-JP', { granularity: 'word' });
+                            segments = Array.from(segmenter.segment(m.text)).map(s => s.segment);
+                        } else { segments = m.text.split(''); }
+                        wordsHTML = segments.map(w => {
+                            const clean = w.replace(/[^\wÀ-ÿ\u0600-\u06FF\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF'-]/g, "").toLowerCase();
+                            if (!clean) return w;
+                            return `<span class="word-interactive" data-clean="${clean}" data-msg-idx="${idx}">${w}</span>`;
+                        }).join('');
+                    } else {
+                        wordsHTML = m.text.split(/\s+/).map(w => {
+                            const clean = w.replace(/[^\wÀ-ÿ\u0600-\u06FF\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF'-]/g, "").toLowerCase();
+                            return `<span class="word-interactive" data-clean="${clean}" data-msg-idx="${idx}">${w}</span>`;
+                        }).join(' ');
+                    }
+                    contentHTML = `<span class="sentence-wrapper" data-msg-idx="${idx}">${wordsHTML}</span>`;
+                }
+            }
+
+            return `
+            <div class="chat-bubble ${m.role}">
+                ${contentHTML}
+            </div>
+            `;
+        }).join('');
+
+        container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendChatMessage(e) {
+        e.preventDefault();
+        const input = document.getElementById('chat-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        state.activeChat.messages.push({ role: 'user', text: text });
+        input.value = '';
+        renderChat();
+        saveSet('activeChat', state.activeChat);
+
+        await sendChatToAI(false);
+    }
+
+    async function sendChatToAI(isIntro) {
+        const container = document.getElementById('chat-messages');
+
+        const typingId = 'typing-' + Date.now();
+        container.insertAdjacentHTML('beforeend', `
+            <div id="${typingId}" class="chat-bubble ai typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+        `);
+        container.scrollTop = container.scrollHeight;
+
+        const targetLang = LANGS[state.targetLang];
+        const topicContext = state.activeChat.isRandom
+            ? "Pick a random common daily situation (e.g., ordering coffee, asking directions, meeting a friend) and start the roleplay."
+            : `The scenario is: "${state.activeChat.topic}". Start or continue the roleplay based on this.`;
+
+        const history = state.activeChat.messages.map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.text}`).join('\n');
+
+        const sysPrompt = `You are a helpful language tutor roleplaying a scenario.
+        Target Language: ${targetLang}
+        Level: ${state.level}
+
+        Instructions:
+        1. Act as a character in the scenario.
+        2. Keep responses short and conversational (1-3 sentences max).
+        3. Correct the user politely ONLY if they make big mistakes, then continue the roleplay naturally.
+        4. Speak ONLY in ${targetLang}, unless explaining a correction.
+
+        ${isIntro ? topicContext : ''}
+
+        CRITICAL OUTPUT FORMAT:
+        Output STRICT JSON:
+        {
+          "reply": "The response in ${targetLang}",
+          "translation": "The full translation of the reply in English",
+          "glossary": { "word_in_target": "translation_in_english", "another": "translation" }
+        }
+        Glossary must include translations for key words in the reply.
+        `;
+
+        const prompt = isIntro ? "Start the conversation." : `Conversation History:\n${history}\n\nRespond to the last user message.`;
+
+        try {
+            const data = await callAI(prompt, sysPrompt);
+            let replyText = data.reply || data.content || "Error...";
+
+            document.getElementById(typingId).remove();
+
+            state.activeChat.messages.push({
+                role: 'ai',
+                text: replyText,
+                data: {
+                    translation: data.translation,
+                    glossary: data.glossary || {}
+                }
+            });
+            renderChat();
+            saveSet('activeChat', state.activeChat);
+
+        } catch (e) {
+            console.error(e);
+            document.getElementById(typingId).remove();
+            state.activeChat.messages.push({ role: 'ai', text: "(Connection Error. Try again.)" });
+            renderChat();
+        }
+    }
+
+    // --- LIBRARY RENDER ---
+    function renderLibrary() {
+        const list = document.getElementById('book-list');
+        loadBooks().then(books => {
+            state.books = books;
+            if (!books.length) {
+                list.innerHTML = `<div class="text-center py-10 opacity-30"><div class="text-4xl mb-2"><img src="assets/history.png" width="64" height="64" style="display:inline"></div>Empty</div>`;
+                return;
+            }
+            list.innerHTML = books.map(b => `
+                <li onclick="openBookId('${b.id}')" class="glass-panel p-4 rounded-xl cursor-pointer hover:bg-slate-800 transition-colors flex justify-between items-center group relative overflow-hidden">
+                    <div class="flex items-center gap-4 z-10 w-full overflow-hidden">
+                        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-violet-500/20 flex items-center justify-center text-lg">
+                            ${b.rating === 'like' ? '<img src="assets/love.png" width="38" height="38">' : (b.desc.includes('🎲') ? '<img src="assets/random.png" width="38" height="38">' : '<img src="assets/history.png" width="38" height="38">')}
+                        </div>
+                        <div class="truncate">
+                            <h3 class="font-bold text-white truncate">${b.title}</h3>
+                            <p class="text-xs text-slate-400 truncate">${new Date(b.created).toLocaleDateString()} • ${b.desc}</p>
+                        </div>
+                    </div>
+                    <button onclick="event.stopPropagation(); showDeleteConfirm('${b.id}');" class="p-2 text-slate-600 hover:text-red-400 z-10">✕</button>
+                </li>
+            `).join('');
+        });
+    }
+
+    function showDeleteConfirm(id) { deleteBook(id); }
+    window.openBookId = (id) => openReader(state.books.find(x => x.id === id));
+    window.deleteBook = (id) => { deleteBookDB(id); renderLibrary(); };
+
+    // --- READER LOGIC ---
+    function openReader(book) {
+        if (!book) return;
+        state.currentBookId = book.id;
+        document.getElementById('reader-title').textContent = book.title;
+        const container = document.getElementById('reader-content');
+        let html = '';
+        const langClass = (book.lang === 'jp' || book.lang === 'ar' || book.lang === 'ru') ? `lang-${book.lang}` : '';
+
+        if (book.paragraphs && Array.isArray(book.paragraphs)) {
+            book.paragraphs.forEach((pObj, p_idx) => {
+                if (pObj.sentences && Array.isArray(pObj.sentences)) {
+                    const sentencesHTML = pObj.sentences.map((sObj, s_idx) => {
+                        let wordsHTML = '';
+                        if (book.lang === 'jp') {
+                            let segments = [];
+                            if (window.Intl && Intl.Segmenter) {
+                                const segmenter = new Intl.Segmenter('ja-JP', { granularity: 'word' });
+                                segments = Array.from(segmenter.segment(sObj.text)).map(s => s.segment);
+                            } else { segments = sObj.text.split(''); }
+                            wordsHTML = segments.map(w => {
+                                const clean = w.replace(/[^\wÀ-ÿ\u0600-\u06FF\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF'-]/g, "").toLowerCase();
+                                if (!clean) return w;
+                                return `<span class="word-interactive" data-clean="${clean}" data-para-idx="${p_idx}" data-sent-idx="${s_idx}">${w}</span>`;
+                            }).join('');
+                        } else {
+                            wordsHTML = sObj.text.split(/\s+/).map(w => {
+                                const clean = w.replace(/[^\wÀ-ÿ\u0600-\u06FF\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF'-]/g, "").toLowerCase();
+                                return `<span class="word-interactive" data-clean="${clean}" data-para-idx="${p_idx}" data-sent-idx="${s_idx}">${w}</span>`;
+                            }).join(' ');
+                        }
+                        return `<span class="sentence-wrapper" data-para-idx="${p_idx}" data-sent-idx="${s_idx}">${wordsHTML}</span>`;
+                    }).join(book.lang === 'jp' ? '' : ' ');
+                    const fullParaTranslation = pObj.sentences.map(s => s.translation).join(' ');
+                    html += `<div class="mb-6 relative group ${langClass}" data-para-idx="${p_idx}">
+                        <p class="text-justify indent-4 leading-relaxed">${sentencesHTML}</p>
+                        <p class="translated-block hidden">${fullParaTranslation}</p>
+                    </div>`;
+                }
+            });
+        }
+        container.innerHTML = html;
+        updateFeedbackButtons(book.rating);
+        changeView('view-reader');
+        if (tour.active) setTimeout(() => tour.show(), 500);
+    }
+
+    function toggleFullTranslation() {
+        tour.action('click');
+        const blocks = document.querySelectorAll('.translated-block');
+        const isOneHidden = Array.from(blocks).some(b => b.classList.contains('hidden'));
+        blocks.forEach(b => {
+            if (isOneHidden) b.classList.remove('hidden'); else b.classList.add('hidden');
+        });
+    }
+
+    async function continueStory() {
+        tour.action('click');
+        const btn = document.getElementById('continue-btn');
+        const loader = document.getElementById('continue-loader');
+        const book = state.books.find(b => b.id === state.currentBookId);
+        if (!book) return;
+        btn.classList.add('hidden'); loader.classList.remove('hidden');
+
+        let lastText = "";
+        if (book.paragraphs) {
+            const lastPara = book.paragraphs[book.paragraphs.length - 1];
+            if (lastPara.sentences) lastText = lastPara.sentences.map(s => s.text).join(' ');
+        }
+        const sysPrompt = `Continue the story coherently. Target Language: ${LANGS[state.targetLang]}.
+        Output JSON schema: { "paragraphs": [ { "sentences": [ { "text": "...", "translation": "..." } ], "glossary": { "word": "english_translation" } } ] }`;
+        const userPrompt = `Previous context: "...${lastText}". Continue (2-3 paragraphs).`;
+
+        try {
+            const data = await callAI(userPrompt, sysPrompt);
+            if (book.paragraphs) book.paragraphs.push(...data.paragraphs);
+            await saveBook(book);
+            openReader(book);
+            setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+        } catch (e) { console.error(e); } finally { btn.classList.remove('hidden'); loader.classList.add('hidden'); }
+    }
+
+    // --- INTERACTION ---
+    let pressTimer; let isLongPress = false; let isScrolling = false;
+    window.addEventListener('scroll', () => { isScrolling = true; }, { passive: true });
+    document.addEventListener('touchmove', () => { isScrolling = true; }, { passive: true });
+    document.addEventListener('touchstart', () => { isScrolling = false; }, { passive: true });
+    document.addEventListener('touchstart', e => {
+        if (e.target.classList.contains('word-interactive')) {
+            isLongPress = false; pressTimer = setTimeout(() => { if (!isScrolling) { isLongPress = true; handleSentence(e.target); if (navigator.vibrate) navigator.vibrate(50); } }, 600);
+        }
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+        clearTimeout(pressTimer);
+        if (!isScrolling) {
+            if (e.target.classList.contains('word-interactive') && !isLongPress) {
+                e.preventDefault(); e.stopPropagation(); handleWord(e.target);
+            } else if (e.target.closest('.sentence-wrapper') && !e.target.classList.contains('word-interactive')) {
+                e.preventDefault(); handleSentence(e.target.closest('.sentence-wrapper'));
+            }
+        }
+    }, { passive: false });
+    document.addEventListener('mousedown', e => {
+        if (e.target.classList.contains('word-interactive')) { isLongPress = false; pressTimer = setTimeout(() => { isLongPress = true; handleSentence(e.target); }, 600); }
+    });
+    document.addEventListener('mouseup', () => clearTimeout(pressTimer));
+    document.addEventListener('click', e => {
+        if (e.target.classList.contains('word-interactive')) { if (!isLongPress) { handleWord(e.target); e.stopPropagation(); } }
+        else { const sentWrapper = e.target.closest('.sentence-wrapper'); if (sentWrapper) handleSentence(sentWrapper); else if (!e.target.closest('#popover')) hidePopover(); }
+    });
+
+    function handleWord(el) {
+        tour.action('tap'); document.querySelectorAll('.word-selected').forEach(x => x.classList.remove('word-selected'));
+        document.querySelectorAll('.sentence-highlight').forEach(x => x.classList.remove('sentence-highlight'));
+        el.classList.add('word-selected');
+
+        const wordClean = el.dataset.clean;
+        let translation = null;
+
+        const paraIdx = el.dataset.paraIdx ? parseInt(el.dataset.paraIdx) : null;
+        if (paraIdx !== null) {
+            const book = state.books.find(b => b.id === state.currentBookId);
+            if (book && book.paragraphs && book.paragraphs[paraIdx]) {
+                const glossary = book.paragraphs[paraIdx].glossary || {};
+                if (glossary[wordClean]) translation = glossary[wordClean];
+                else { const key = Object.keys(glossary).find(k => k.toLowerCase() === wordClean || k.toLowerCase().includes(wordClean)); if (key) translation = glossary[key]; }
+            }
+        }
+        else if (el.dataset.msgIdx !== undefined) {
+            const msgIdx = parseInt(el.dataset.msgIdx);
+            const msg = state.activeChat.messages[msgIdx];
+            if (msg && msg.data && msg.data.glossary) {
+                const glossary = msg.data.glossary;
+                if (glossary[wordClean]) translation = glossary[wordClean];
+                else { const key = Object.keys(glossary).find(k => k.toLowerCase() === wordClean || k.toLowerCase().includes(wordClean)); if (key) translation = glossary[key]; }
+            }
+        }
+
+        const displayWord = el.innerText.replace(/[.,!?;:]/g, '');
+        if (translation) showPopover(el, `<div class="text-xl font-bold capitalize mb-1 text-white">${displayWord}</div><div class="text-violet-300">${translation}</div>`);
+        else showPopover(el, `<div class="text-xl font-bold capitalize mb-1 text-white">${displayWord}</div><div class="text-slate-400 text-xs">N/A</div>`);
+    }
+
+    function handleSentence(el) {
+        tour.action('hold'); document.querySelectorAll('.word-selected').forEach(x => x.classList.remove('word-selected'));
+        document.querySelectorAll('.sentence-highlight').forEach(x => x.classList.remove('sentence-highlight'));
+        const sentenceEl = el.closest('.sentence-wrapper');
+
+        let trans = null;
+
+        if (sentenceEl.dataset.paraIdx !== undefined) {
+            const paraIdx = parseInt(sentenceEl.dataset.paraIdx);
+            const sentIdx = parseInt(sentenceEl.dataset.sentIdx);
+            const book = state.books.find(b => b.id === state.currentBookId);
+            if (book && book.paragraphs && book.paragraphs[paraIdx] && book.paragraphs[paraIdx].sentences && book.paragraphs[paraIdx].sentences[sentIdx]) {
+                trans = book.paragraphs[paraIdx].sentences[sentIdx].translation;
+            }
+        }
+        else if (sentenceEl.dataset.msgIdx !== undefined) {
+            const msgIdx = parseInt(sentenceEl.dataset.msgIdx);
+            const msg = state.activeChat.messages[msgIdx];
+            if (msg && msg.data && msg.data.translation) {
+                trans = msg.data.translation;
+            }
+        }
+
+        if (trans) {
+            sentenceEl.classList.add('sentence-highlight');
+            showPopover(el, `<div class="text-sm text-slate-300 italic leading-relaxed text-left">"${trans}"</div>`);
+        }
+    }
+    
+    function showPopover(el, html) {
+        const pop = document.getElementById('popover'); const content = document.getElementById('popover-content'); const arrow = document.getElementById('popover-arrow');
+        content.innerHTML = html; pop.classList.remove('hidden'); pop.style.opacity = '0';
+        const popRect = pop.getBoundingClientRect(); const elRect = el.getBoundingClientRect(); const margin = 12; const screenMargin = 10;
+        let top = elRect.top - popRect.height - margin; let onTop = true;
+        if (top < screenMargin) { const spaceBelow = window.innerHeight - elRect.bottom; if (spaceBelow > popRect.height + margin) { top = elRect.bottom + margin; onTop = false; } else { top = screenMargin; } }
+        let left = elRect.left + (elRect.width / 2) - (popRect.width / 2);
+        if (left < screenMargin) left = screenMargin; if (left + popRect.width > window.innerWidth - screenMargin) left = window.innerWidth - popRect.width - screenMargin;
+        pop.style.top = `${top}px`; pop.style.left = `${left}px`;
+        arrow.style.left = `${elRect.left + (elRect.width / 2) - left - 8}px`;
+        if (onTop) { arrow.style.bottom = '-8px'; arrow.style.top = 'auto'; arrow.style.borderWidth = '0 1px 1px 0'; }
+        else { arrow.style.top = '-8px'; arrow.style.bottom = 'auto'; arrow.style.borderWidth = '1px 0 0 1px'; }
+        requestAnimationFrame(() => { pop.style.opacity = '1'; });
+    }
+    
+    function hidePopover() {
+        const pop = document.getElementById('popover');
+        if (pop) { pop.style.opacity = '0'; setTimeout(() => { pop.classList.add('hidden'); document.querySelectorAll('.word-selected, .sentence-highlight').forEach(e => e.classList.remove('word-selected', 'sentence-highlight')); }, 200); }
+    }
+
+    function updateFeedbackButtons(r) {
+        const like = document.getElementById('btn-like'); const dislike = document.getElementById('btn-dislike');
+        const baseClass = "p-4 rounded-xl bg-slate-800 border border-slate-700 transition-all text-slate-400";
+        like.className = baseClass + " hover:border-emerald-500 hover:text-emerald-500";
+        dislike.className = baseClass + " hover:border-red-500 hover:text-red-500";
+        if (r === 'like') like.className = "p-4 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-500 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]";
+        if (r === 'dislike') dislike.className = "p-4 rounded-xl bg-red-500/20 border border-red-500 text-red-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]";
+    }
+    
+    function rateBook(v) {
+        const b = state.books.find(x => x.id === state.currentBookId);
+        if (b) { b.rating = (b.rating === v) ? null : v; saveBook(b); updateFeedbackButtons(b.rating); }
+    }
+
+    function openSettings() {
+        const sel = document.getElementById('setting-lang'); sel.innerHTML = '';
+        Object.entries(LANGS).forEach(([k, v]) => { const opt = document.createElement('option'); opt.value = k; opt.textContent = v; if (k === state.targetLang) opt.selected = true; sel.appendChild(opt); });
+        const uiSel = document.getElementById('setting-interface-lang'); uiSel.innerHTML = '';
+        Object.entries(LANGS).forEach(([k, v]) => { const opt = document.createElement('option'); opt.value = k; opt.textContent = v; if (k === state.interfaceLang) opt.selected = true; uiSel.appendChild(opt); });
+        document.getElementById('setting-level').value = state.level;
+        changeView('view-settings');
+    }
+
+    function updateSetting(k, v) { state[k] = v; saveSet(k, v); if (k === 'targetLang') document.getElementById('lang-badge').textContent = v.toUpperCase(); }
+    function updateInterfaceLanguage(lang) { state.interfaceLang = lang; saveSet('interfaceLang', lang); updateInterface(); }
+
+    // --- INIT ---
+    (async () => {
+        await initDB();
+        const s = await loadSet();
+        if (s.targetLang) state.targetLang = s.targetLang;
+        if (s.interfaceLang) state.interfaceLang = s.interfaceLang;
+        if (s.level) state.level = s.level;
+        if (s.userProfile) state.userProfile = s.userProfile;
+        if (s.lastGenerationTime) state.lastGenerationTime = s.lastGenerationTime;
+        if (s.activeChat) state.activeChat = s.activeChat;
+        state.onboardingDone = !!s.onboardingDone;
+        state.tutorialDone = !!s.tutorialDone;
+
+        document.getElementById('lang-badge').textContent = state.targetLang.toUpperCase();
+        updateInterface();
+
+        if (!state.onboardingDone) { changeView('view-onboarding'); renderOnboarding(); }
+        else { changeView('view-home'); startCooldownButton(); if (!state.tutorialDone) setTimeout(() => tour.start(), 800); }
+    })();
+
+</script>
+</body>
+
+</html>
